@@ -16,7 +16,11 @@ class Mediciones extends Model
     ];
 
     protected $guarded = [
-        'id', 'remedir', 'avisa'
+        'id'
+    ];
+
+    protected $dates = [
+        'entrega', 'remedir', 'avisa'
     ];
 
     public function clientes()

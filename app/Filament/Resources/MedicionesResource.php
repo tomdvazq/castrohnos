@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Cliente;
@@ -147,27 +148,48 @@ class MedicionesResource extends Resource
                     ->formatStateUsing(function (string $state) {
                         return new HtmlString($state);
                     }),
-                TextColumn::make('')
+                TextColumn::make('created_at')
                     ->label('Lapsos')
                     ->since()
                     ->getStateUsing(function ($record): ?string {
                         try {
                             $estado = $record->estado;
                             $result = "";
+                            $total = "";
 
                             if ($estado === 'Medir' || $estado === 'Reclama medición') {
                                 $result = $record->created_at;
+                                $total = "Hace " . $result->diffInDays() . " días";
                             } elseif ($estado === 'Remedir') {
                                 $result = $record->remedir;
+
+                                $actual = "";
+                                $hoy = strtotime('now');
+                                $delivery = strtotime($record->remedir);
+                                $segundos = $hoy - $delivery;
+                                $dias = $segundos / 86400;
+                                
+                                if ($dias < 6){
+                                    $actual = "🟢 ";
+                                } else {
+                                    $actual = "🔴 ";
+                                }
+
+                                $total = $actual . " Hace " . $result->diffInDays() . " días";
                             } elseif ($estado === 'Avisa para medir') {
                                 $result = $record->avisa;
+                                $total = "Hace " . $result->diffInDays() . " días";
                             }
 
-                            return $result;
+
+                            return $total;
                         } catch (\Exception $e) {
 
                             return 'Ha ocurrido un error';
                         }
+                    })
+                    ->formatStateUsing(function (string $state) {
+                        return new HtmlString($state);
                     }),
                 TextColumn::make('clientes.nombre')
                     ->label('Cliente')
