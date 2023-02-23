@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pedido extends Model
+class Recotizacion extends Model
 {
     use HasFactory;
+
+    protected $table = 'pedidos';
 
     protected $fillable = [
         'identificacion', 'cliente_id', 'estado', 'entrega', 'remedir', 'avisa', 'medido'
@@ -33,7 +35,7 @@ class Pedido extends Model
 
     public function materiales_selections()
     {
-        return $this->hasMany(MaterialesSelection::class);
+        return $this->hasMany(MaterialesSelection::class, 'pedido_id');
     }
 
     public function materials()

@@ -59,15 +59,16 @@ class MedicionesResource extends Resource
                     ])
                     ->columnSpan(2),
 
-                Fieldset::make('Herramientas del medidor')
+                Fieldset::make('Estado')
                     ->schema([
                         Select::make('estado')
+                            ->label('Actualmente en')
                             ->options([
                                 'Medir' => '🟢 Medir',
                                 'Avisa para medir' => '🔵 Avisa para medir',
                                 'Remedir' => '🟣 Remedir',
                                 'Reclama medición' => '🟠 Reclama medición',
-                                'Medido' => '✅ Medido',
+                                // 'Medido' => '✅ Medido',
                                 // 'Medida del cliente' => 'Medida del cliente',
                                 // 'Corte' => 'Corte',
                                 // 'En taller' => 'En taller',
@@ -87,6 +88,23 @@ class MedicionesResource extends Resource
                             ->displayFormat('d/m/Y'),
                         ])
                         ->columnSpan(1),
+                Fieldset::make('Herramientas')
+                    ->schema([
+                        Select::make('estado')
+                            ->label('¿Esta mesada ya fue medida?')
+                            ->options([
+                                'Medido' => '✅ Medida',
+                            ])
+                            ->placeholder('❌ No fue medida')
+                            ->columnSpan(1),
+
+                            DatePicker::make('medido')
+                            ->label('Fecha de medición')
+                            ->timezone('America/Argentina/Buenos_Aires')
+                            ->displayFormat('d/m/Y')
+                            ->columnSpan(1),
+                            ])
+                            ->columns(2)
             ])
             ->columns(3);
     }

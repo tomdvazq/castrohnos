@@ -45,11 +45,11 @@ class PedidosRelationManager extends RelationManager
                         // 'Avisa para medir' => 'Avisa para medir',
                         // 'Remedir' => 'Remedir',
                         // 'Reclama medición' => 'Reclama medición',
-                        'Medida del cliente' => 'Medida del cliente',
-                        'Corte' => 'Corte',
-                        'En taller' => 'En taller',
-                        'Cortado' => 'Cortado',
-                        'Entregas' => 'Entregas'
+                        'Medida del cliente' => '📐 Medida del cliente',
+                        'Corte' => '🪓 Corte',
+                        'En taller' => '👩‍🔧 En taller',
+                        'Cortado' => '👍 Cortado',
+                        'Entregas' => '🚚 Entregas'
                     ])
                     ->default('Medida del cliente'),
 

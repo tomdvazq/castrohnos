@@ -12,7 +12,7 @@ class Mediciones extends Model
     protected $table = 'pedidos';
 
     protected $fillable = [
-        'identificacion', 'cliente_id', 'estado', 'entrega', 'remedir', 'avisa'
+        'identificacion', 'cliente_id', 'estado', 'entrega', 'remedir', 'avisa', 'medido'
     ];
 
     protected $guarded = [
@@ -20,7 +20,7 @@ class Mediciones extends Model
     ];
 
     protected $dates = [
-        'entrega', 'remedir', 'avisa'
+        'entrega', 'remedir', 'avisa', 'medido'
     ];
 
     public function clientes()

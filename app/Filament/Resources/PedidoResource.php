@@ -65,12 +65,12 @@ class PedidoResource extends Resource
                             // 'Avisa para medir' => 'Avisa para medir',
                             // 'Remedir' => 'Remedir',
                             // 'Reclama medición' => 'Reclama medición',
-                            'Medido' => 'Medido',
-                            'Medida del cliente' => 'Medida del cliente',
-                            'Corte' => 'Corte',
-                            'En taller' => 'En taller',
-                            'Cortado' => 'Cortado',
-                            'Entregas' => 'Entregas'
+                            'Medido' => '✅ Medido',
+                            'Medida del cliente' => '📐 Medida del cliente',
+                            'Corte' => '🪓 Corte',
+                            'En taller' => '👩‍🔧 En taller',
+                            'Cortado' => '👍 Cortado',
+                            'Entregas' => '🚚 Entregas'
                         ])
                         ->columnSpan('full'),
 

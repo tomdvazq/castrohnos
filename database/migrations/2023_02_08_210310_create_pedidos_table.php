@@ -21,9 +21,11 @@ return new class extends Migration
                 ->nullable();
             $table->date('entrega')
                 ->nullable();
-            $table->dateTime('remedir')
+            $table->date('remedir')
                 ->nullable();
-            $table->dateTime('avisa')
+            $table->date('avisa')
+                ->nullable();
+            $table->date('medido')
                 ->nullable();
             $table->timestamps();
 
