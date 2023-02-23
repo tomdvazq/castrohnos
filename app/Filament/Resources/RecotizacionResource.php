@@ -151,7 +151,8 @@ class RecotizacionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\MaterialesSelectionsRelationManager::class,
+            RelationManagers\ClientesRelationManager::class,
         ];
     }
     
