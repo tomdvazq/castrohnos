@@ -98,13 +98,13 @@ class MedicionesResource extends Resource
                             ->placeholder('❌ No fue medida')
                             ->columnSpan(1),
 
-                            DatePicker::make('medido')
+                        DatePicker::make('medido')
                             ->label('Fecha de medición')
                             ->timezone('America/Argentina/Buenos_Aires')
                             ->displayFormat('d/m/Y')
                             ->columnSpan(1),
-                            ])
-                            ->columns(2)
+                        ])
+                    ->columns(2)
             ])
             ->columns(3);
     }
