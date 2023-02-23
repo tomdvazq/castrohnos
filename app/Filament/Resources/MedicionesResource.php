@@ -82,7 +82,7 @@ class MedicionesResource extends Resource
                             ->displayFormat('d/m/Y'),
 
                             DatePicker::make('avisa')
-                            ->label('Avisa para medir')
+                            ->label('Avisa')
                             ->timezone('America/Argentina/Buenos_Aires')
                             ->displayFormat('d/m/Y'),
                         ])
@@ -159,14 +159,27 @@ class MedicionesResource extends Resource
 
                             if ($estado === 'Medir' || $estado === 'Reclama medición') {
                                 $result = $record->created_at;
-                                $total = "Hace " . $result->diffInDays() . " días";
+
+                                $actual = "";
+                                $hoy = strtotime('now');
+                                $pasadoDeFecha = strtotime($record->created_at);
+                                $segundos = $hoy - $pasadoDeFecha;
+                                $dias = $segundos / 86400;
+                                
+                                if ($dias < 6){
+                                    $actual = "🟢 ";
+                                } else {
+                                    $actual = "🔴 ";
+                                }
+
+                                $total = $actual . " Hace " . $result->diffInDays() . " días";
                             } elseif ($estado === 'Remedir') {
                                 $result = $record->remedir;
 
                                 $actual = "";
                                 $hoy = strtotime('now');
-                                $delivery = strtotime($record->remedir);
-                                $segundos = $hoy - $delivery;
+                                $pasadoDeFecha = strtotime($record->remedir);
+                                $segundos = $hoy - $pasadoDeFecha;
                                 $dias = $segundos / 86400;
                                 
                                 if ($dias < 6){
@@ -178,7 +191,20 @@ class MedicionesResource extends Resource
                                 $total = $actual . " Hace " . $result->diffInDays() . " días";
                             } elseif ($estado === 'Avisa para medir') {
                                 $result = $record->avisa;
-                                $total = "Hace " . $result->diffInDays() . " días";
+
+                                $actual = "";
+                                $hoy = strtotime('now');
+                                $pasadoDeFecha = strtotime($record->avisa);
+                                $segundos = $hoy - $pasadoDeFecha;
+                                $dias = $segundos / 86400;
+                                
+                                if ($dias < 120){
+                                    $actual = "🟢 ";
+                                } else {
+                                    $actual = "<div style='display: flex; flex-direction: row; justify-content: center; align-items: center;'>🔴 <b style='font-size: 10px'>RECOTIZAR</b></div>";
+                                }
+
+                                $total = $actual . " Hace " . $result->diffInDays() . " días";
                             }
 
 
