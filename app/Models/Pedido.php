@@ -10,7 +10,7 @@ class Pedido extends Model
     use HasFactory;
 
     protected $fillable = [
-        'identificacion', 'cliente_id', 'estado', 'entrega'
+        'identificacion', 'cliente_id', 'estado', 'entrega', 'remedir', 'avisa'
     ];
 
     protected $guarded = [
@@ -18,7 +18,7 @@ class Pedido extends Model
     ];
 
     protected $dates = [
-        'entrega'
+        'entrega', 'remedir', 'avisa'
     ];
 
     public function clientes()

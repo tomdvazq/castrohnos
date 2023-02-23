@@ -9,6 +9,7 @@ use App\Models\Cliente;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,16 +34,23 @@ class NuevoResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('nombre'),
+                TextInput::make('nombre')
+                    ->required(),
                 TextInput::make('direccion')
                     ->label('Dirección'),
                 TextInput::make('localidad'),
-                TextInput::make('contacto'),
-                TextInput::make('documento'),
-                TextInput::make('cuit_cuil')
-                    ->label('CUIT/CUIL'),
-                TextInput::make('razon_social')
-                    ->label('Razón Social'),
+                TextInput::make('contacto')
+                    ->required(),
+                Fieldset::make('adicional')
+                    ->label('Información adicional')
+                    ->schema([
+                        TextInput::make('documento'),
+                        TextInput::make('cuit_cuil')
+                            ->label('CUIT/CUIL'),
+                        TextInput::make('razon_social')
+                            ->label('Razón Social'),
+                    ])
+                    ->columns(3)
             ]);
     }
 

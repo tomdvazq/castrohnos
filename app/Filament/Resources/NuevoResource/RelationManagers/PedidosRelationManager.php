@@ -29,10 +29,11 @@ class PedidosRelationManager extends RelationManager
                 Select::make('estado')
                     ->label('Estado del pedido')
                     ->options([
-                        'Medir' => 'Medir',
-                        'Avisa para medir' => 'Avisa para medir',
-                        'Remedir' => 'Remedir',
-                        'Reclama medición' => 'Reclama medición',
+                        'Medir' => '🟢 Medir',
+                        'Avisa para medir' => '🔵 Avisa para medir',
+                        'Remedir' => '🟣 Remedir',
+                        'Reclama medición' => '🟠 Reclama medición',
+                        // 'Medido' => '✅ Medido',
                         // 'Medida del cliente' => 'Medida del cliente',
                         // 'Corte' => 'Corte',
                         // 'En taller' => 'En taller',

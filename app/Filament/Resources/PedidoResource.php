@@ -65,7 +65,7 @@ class PedidoResource extends Resource
                             // 'Avisa para medir' => 'Avisa para medir',
                             // 'Remedir' => 'Remedir',
                             // 'Reclama medición' => 'Reclama medición',
-                            // 'Medido' => 'Medido',
+                            'Medido' => 'Medido',
                             'Medida del cliente' => 'Medida del cliente',
                             'Corte' => 'Corte',
                             'En taller' => 'En taller',
@@ -142,6 +142,7 @@ class PedidoResource extends Resource
                 SelectFilter::make('estado')
                     ->label('Estado')
                     ->options([
+                        'Medido' => 'Medido',
                         'Medida del cliente' => 'Medida del cliente',
                         'Corte' => 'Corte',
                         'En taller' => 'En taller',

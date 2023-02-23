@@ -8,6 +8,7 @@ use App\Models\Cliente;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
@@ -38,11 +39,16 @@ class ClienteResource extends Resource
                     ->label('Dirección'),
                 TextInput::make('localidad'),
                 TextInput::make('contacto'),
-                TextInput::make('documento'),
-                TextInput::make('cuit_cuil')
-                    ->label('CUIT/CUIL'),
-                TextInput::make('razon_social')
-                    ->label('Razón Social'),
+                Fieldset::make('adicional')
+                    ->label('Información adicional')
+                    ->schema([
+                        TextInput::make('documento'),
+                        TextInput::make('cuit_cuil')
+                            ->label('CUIT/CUIL'),
+                        TextInput::make('razon_social')
+                            ->label('Razón Social'),
+                    ])
+                    ->columns(3)
             ]);
     }
 

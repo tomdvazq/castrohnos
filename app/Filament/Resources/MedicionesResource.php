@@ -62,11 +62,11 @@ class MedicionesResource extends Resource
                     ->schema([
                         Select::make('estado')
                             ->options([
-                                'Medir' => 'Medir',
-                                'Avisa para medir' => 'Avisa para medir',
-                                'Remedir' => 'Remedir',
-                                'Reclama medición' => 'Reclama medición',
-                                'Medido' => 'Medido',
+                                'Medir' => '🟢 Medir',
+                                'Avisa para medir' => '🔵 Avisa para medir',
+                                'Remedir' => '🟣 Remedir',
+                                'Reclama medición' => '🟠 Reclama medición',
+                                'Medido' => '✅ Medido',
                                 // 'Medida del cliente' => 'Medida del cliente',
                                 // 'Corte' => 'Corte',
                                 // 'En taller' => 'En taller',
@@ -75,13 +75,13 @@ class MedicionesResource extends Resource
                             ])
                             ->columnSpan('full'),
 
-                            DatePicker::make('created_at')
-                            ->label('Avisa para medir')
+                            DatePicker::make('remedir')
+                            ->label('Remedir')
                             ->timezone('America/Argentina/Buenos_Aires')
                             ->displayFormat('d/m/Y'),
 
-                            DatePicker::make('created_at')
-                            ->label('Reclama medición')
+                            DatePicker::make('avisa')
+                            ->label('Avisa para medir')
                             ->timezone('America/Argentina/Buenos_Aires')
                             ->displayFormat('d/m/Y'),
                         ])
@@ -158,15 +158,15 @@ class MedicionesResource extends Resource
                             if ($estado === 'Medir' || $estado === 'Reclama medición') {
                                 $result = $record->created_at;
                             } elseif ($estado === 'Remedir') {
-                                $result = $record->resize_date;
+                                $result = $record->remedir;
                             } elseif ($estado === 'Avisa para medir') {
-                                $result = $record->call_to_size_date;
+                                $result = $record->avisa;
                             }
 
                             return $result;
                         } catch (\Exception $e) {
 
-                            return ($record->resize_date);
+                            return 'Ha ocurrido un error';
                         }
                     }),
                 TextColumn::make('clientes.nombre')

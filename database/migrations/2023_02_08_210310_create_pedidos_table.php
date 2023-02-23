@@ -21,6 +21,10 @@ return new class extends Migration
                 ->nullable();
             $table->date('entrega')
                 ->nullable();
+            $table->dateTime('remedir')
+                ->nullable();
+            $table->dateTime('avisa')
+                ->nullable();
             $table->timestamps();
 
             $table->foreign('cliente_id')->references('id')->on('clientes');

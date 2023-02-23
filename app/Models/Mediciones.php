@@ -12,11 +12,11 @@ class Mediciones extends Model
     protected $table = 'pedidos';
 
     protected $fillable = [
-        'identificacion', 'cliente_id', 'estado', 'entrega'
+        'identificacion', 'cliente_id', 'estado', 'entrega', 'remedir', 'avisa'
     ];
 
     protected $guarded = [
-        'id'
+        'id', 'remedir', 'avisa'
     ];
 
     public function clientes()
