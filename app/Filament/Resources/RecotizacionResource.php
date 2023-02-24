@@ -124,7 +124,7 @@ class RecotizacionResource extends Resource
                             $result = "";
 
                             if ($estado === 'Medido') {
-                                $result = '<span style="background-color:#27AE60; font-size:12px; padding: 3px; font-weight: bold; color: white">MEDIDO</span>';
+                                $result = '<span style="font-size:12px; padding: 3px; font-weight: bold; color: #000000">MEDIDO</span>';
                             } else {
                                 $result = 'Un error ha ocurrido';
                             }
@@ -139,34 +139,37 @@ class RecotizacionResource extends Resource
                         return new HtmlString($state);
                     }),
                 TextColumn::make('medido')
-                    ->label('Hace')
+                    ->label('Medido hace')
+                    ->since()
                     ->getStateUsing(function ($record): ?string {
                         try {
                             $estado = $record->estado;
-                            $result = $record->medido;
-                            $valor = "";
+                            $result = "";
                             $total = "";
 
-                            $fechaMedido = strtotime($record->medido);
-                            $fechaConcluida = strtotime('+5 days' . $fechaMedido);
-                            $segundos = $fechaConcluida - $fechaMedido;
-                            $dias = $segundos / 86400;
+                            if ($estado === 'Medido') {
+                                $result = $record->medido;
 
-                            if ($dias < -19390) {
-                                $valor = '<span style="background-color:#2FC441; padding:3px; color:white; border-radius: 5px; font-size:14px;">A tiempo</span>';
+                                $actual = "";
+                                $hoy = strtotime('now');
+                                $pasadoDeFecha = strtotime($record->medido);
+                                $segundos = $hoy - $pasadoDeFecha;
+                                $dias = $segundos / 86400;
 
-                                $total = $valor . $result->diffInDays();
-                            } elseif ($dias >= -19390) {
-                                $valor = '<span style="background-color:#CB4335; padding:3px; color:white; border-radius: 5px; font-size:14px;">Recotizar</span>';
+                                if ($dias < 6) {
+                                    $actual = '<span style="background-color:#05CC2A; font-size:12px; padding: 3px; font-weight: bold; color: white; border: solid 2px #000">EN TIEMPO</span>';
+                                } else {
+                                    $actual = '<span style="background-color:#CB4335; font-size:12px; padding: 3px; font-weight: bold; color: white; border: solid 2px #000">RECOTIZAR</span>';
+                                }
 
-                                $total = $valor;
+                                $total = $result->diffInDays() . " días " . $actual ;
                             }
+
 
                             return $total;
                         } catch (\Exception $e) {
 
-                            return ('Ha ocurrido un error'
-                            );
+                            return 'Ha ocurrido un error';
                         }
                     })
                     ->formatStateUsing(function (string $state) {
