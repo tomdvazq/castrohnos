@@ -225,7 +225,7 @@ class RecotizacionResource extends Resource
                     ->default('Medido'),
 
                 SelectFilter::make('confirmacion')
-                    ->label('Confirmacion')
+                    ->label('Confirmación')
                     ->options([
                         'No seleccionado' => 'No seleccionado',
                         'Confirmado' => 'Confirmado'

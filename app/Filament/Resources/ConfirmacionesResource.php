@@ -215,7 +215,7 @@ class ConfirmacionesResource extends Resource
                     ->default('Medido'),
 
                 SelectFilter::make('confirmacion')
-                    ->label('Confirmacion')
+                    ->label('Confirmación')
                     ->options([
                         'No confirmado' => 'No confirmado',
                     ])

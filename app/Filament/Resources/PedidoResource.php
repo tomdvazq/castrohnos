@@ -81,6 +81,25 @@ class PedidoResource extends Resource
                         ->columnSpanFull()
                     ])
                     ->columnSpan(1),
+
+                    Fieldset::make('Herramientas')
+                        ->schema([
+                            Select::make('confirmacion')
+                                ->label('Confirmación del pedido')
+                                ->helperText('En caso de que el cliente haya dejado una seña marcar el pedido como "Confirmado". De lo contrario, seleccionar "No confirmado" para redireccionar la orden a la solapa "A confirmar"')
+                                ->options([
+                                    "No seleccionado" => '🔔 No seleccionado',
+                                    "No confirmado" => '❌ No confirmado',
+                                    "Confirmado" => '🤩 Confirmado'
+                                ])
+                                ->default('No seleccionado'),
+
+                            TextInput::make('seña')
+                                ->label('Valor de la seña')
+                                ->helperText('En caso de que el pedido haya sido marcado como "Confirmado" aclarar cuanto dinero dejó de seña. Tenga en cuenta que este campo es un tipo de dato numérico y no permite letras ni signos especiales.')
+                                ->mask(fn (TextInput\Mask $mask) => $mask->money(prefix: '$ ', thousandsSeparator: ',', decimalPlaces: 2, isSigned: false))
+                        ])
+                        ->columns(2)
         ])
         ->columns(3);
     }
@@ -157,6 +176,13 @@ class PedidoResource extends Resource
                     ])
                 ->multiple()
                 ->default((['Medido', 'Medida del cliente', 'Corte', 'En taller', 'Cortado', 'Entregas'])),
+
+                SelectFilter::make('confirmacion')
+                    ->label('Confirmación')
+                    ->options([
+                        'Confirmado' => 'Confirmado'
+                    ])
+                    ->default('Confirmado'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
