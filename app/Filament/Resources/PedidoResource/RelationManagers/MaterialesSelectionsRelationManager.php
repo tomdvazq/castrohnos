@@ -60,14 +60,16 @@ class MaterialesSelectionsRelationManager extends RelationManager
                     ->searchable(),
 
                 TextInput::make('cantidad')
-                    ->label('Cantidad en m²')
+                    ->label('Cantidad')
                     ->afterStateUpdated(function ($set, $get) {
                         $material = MaterialListado::find($get('material_listado_id'));
                         $stock = $material?->stock ?? 0;
                         $m2 = $get('cantidad');
 
                         $set($stock, intval($stock) - intval($m2));
-                    }),
+                    })
+                    ->numeric()
+                    ->suffix('m²'),
 
                 TextInput::make('material')
                     ->label('Renderización de materiales')
