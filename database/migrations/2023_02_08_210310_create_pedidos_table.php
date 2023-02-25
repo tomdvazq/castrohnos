@@ -29,8 +29,10 @@ return new class extends Migration
                 ->nullable();
             $table->date('medido')
                 ->nullable();
-            // Base de datos de los pedidos: Confirmacion
+            // Base de datos de los pedidos: Confirmacion y seña
             $table->enum('confirmacion', ['No seleccionado', 'No confirmado', 'Confirmado'])
+                ->default('No seleccionado');
+            $table->decimal('seña', 19,2)
                 ->nullable();
             // Base de datos de los pedidos: TimeStamps (created_at/updated_at)
             $table->timestamps();

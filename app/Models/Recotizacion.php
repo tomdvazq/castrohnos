@@ -12,7 +12,7 @@ class Recotizacion extends Model
     protected $table = 'pedidos';
 
     protected $fillable = [
-        'identificacion', 'cliente_id', 'estado', 'entrega', 'remedir', 'avisa', 'medido', 'confirmacion'
+        'identificacion', 'cliente_id', 'estado', 'entrega', 'remedir', 'avisa', 'medido', 'confirmacion', 'seña'
     ];
 
     protected $guarded = [

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Closure;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Tables;
@@ -17,6 +18,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rules\Exists;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
@@ -67,7 +69,7 @@ class RecotizacionResource extends Resource
                             ->displayFormat('d/m/Y')
                             ->disabled(),
                     ])
-                    ->columnSpan(2),
+                    ->columnSpan(4),
                 Fieldset::make('Estado')
                     ->schema([
                         Select::make('estado')
@@ -91,7 +93,7 @@ class RecotizacionResource extends Resource
                             ->displayFormat('d/m/Y')
                             ->columnSpanFull()
                     ])
-                    ->columnSpan(1),
+                    ->columnSpan(2),
 
                 Fieldset::make('Herramientas')
                     ->schema([
@@ -112,18 +114,23 @@ class RecotizacionResource extends Resource
                             ->columnSpan(1),
 
                         Select::make('confirmacion')
-                            ->label('Confirmación de la mesada')
+                            ->label('Confirmación del pedido')
                             ->helperText('En caso de que el cliente haya dejado una seña marcar el pedido como "Confirmado". De lo contrario, seleccionar "No confirmado" para redireccionar la orden a la solapa "A confirmar"')
                             ->options([
                                 "No seleccionado" => '🔔 No seleccionado',
                                 "No confirmado" => '❌ No confirmado',
                                 "Confirmado" => '🤩 Confirmado'
                             ])
-                            ->default('No seleccionado')
+                            ->default('No seleccionado'),
+
+                        TextInput::make('seña')
+                            ->label('Valor de la seña')
+                            ->helperText('En caso de que el pedido haya sido marcado como "Confirmado" aclarar cuanto dinero dejó de seña. Tenga en cuenta que este campo es un tipo de dato numérico y no permite letras ni signos especiales.')
+                            ->mask(fn (TextInput\Mask $mask) => $mask->money(prefix: '$ ', thousandsSeparator: ',', decimalPlaces: 2, isSigned: false))
                     ])
                     ->columns(2)
             ])
-            ->columns(3);
+            ->columns(6);
     }
 
     public static function table(Table $table): Table

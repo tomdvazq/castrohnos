@@ -132,6 +132,8 @@ class PedidoResource extends Resource
                     ->searchable(),
                 TextColumn::make('identificacion')
                     ->label('Identificación del pedido'),
+                TextColumn::make('seña')
+                    ->money('ars'),
                 TextColumn::make('materiales_selections.material')
                     ->label('Material')
                     ->searchable(),

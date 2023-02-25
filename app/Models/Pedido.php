@@ -10,7 +10,7 @@ class Pedido extends Model
     use HasFactory;
 
     protected $fillable = [
-        'identificacion', 'cliente_id', 'estado', 'entrega', 'remedir', 'avisa', 'medido', 'confirmacion'
+        'identificacion', 'cliente_id', 'estado', 'entrega', 'remedir', 'avisa', 'medido', 'confirmacion', 'seña'
     ];
 
     protected $guarded = [
