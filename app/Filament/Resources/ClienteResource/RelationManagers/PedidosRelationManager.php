@@ -57,6 +57,15 @@ class PedidosRelationManager extends RelationManager
                     ->label('Pedido a entregar el')
                     ->timezone('America/Argentina/Buenos_Aires')
                     ->displayFormat('d/m/Y'),
+
+                Select::make('confirmacion')
+                    ->label('Confirmación de la mesada')
+                    ->helperText('En caso de que el cliente haya dejado una seña marcar el pedido como "Confirmado". De lo contrario, seleccionar "No confirmado" para redireccionar la orden a la solapa "A confirmar"')
+                    ->options([
+                        "No confirmado" => '❌ No confirmado',
+                        "Confirmado" => '🤩 Confirmado'
+                    ])
+                    ->default("Confirmado")
             ]);
     }
 

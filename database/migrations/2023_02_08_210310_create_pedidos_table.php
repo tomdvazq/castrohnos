@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
+            // Base de datos de los pedidos: Relación con cliente y datos básicos
             $table->unsignedBigInteger('cliente_id');
             $table->string('identificacion');
             $table->enum('estado', ['Medir', 'Avisa para medir', 'Remedir', 'Reclama medición', 'Medido', 'Medida del cliente', 'Corte', 'En taller', 'Cortado', 'Entregas'])
                 ->nullable();
+            // Base de datos de los pedidos: Fechas
             $table->date('entrega')
                 ->nullable();
             $table->date('remedir')
@@ -27,6 +29,10 @@ return new class extends Migration
                 ->nullable();
             $table->date('medido')
                 ->nullable();
+            // Base de datos de los pedidos: Confirmacion
+            $table->enum('confirmacion', ['No seleccionado', 'No confirmado', 'Confirmado'])
+                ->nullable();
+            // Base de datos de los pedidos: TimeStamps (created_at/updated_at)
             $table->timestamps();
 
             $table->foreign('cliente_id')->references('id')->on('clientes');

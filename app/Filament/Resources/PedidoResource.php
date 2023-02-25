@@ -109,6 +109,10 @@ class PedidoResource extends Resource
                                 $result = "🔴 Hace ";
                             }
 
+                            if($record->entrega === null){
+                                return '❌ No definido';
+                            }
+
 
                             return $result . " " . $record->entrega->diffInDays() . " días";
 

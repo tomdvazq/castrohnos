@@ -16,4 +16,14 @@ class ListRecotizacions extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    protected function getDefaultTableSortColumn(): ?string
+    {
+        return 'medido';
+    }
+
+    protected function getDefaultTableSortDirection(): ?string
+    {
+        return 'des';
+    }
 }

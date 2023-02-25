@@ -21,6 +21,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Filters\TernaryFilter;
 use SebastianBergmann\RecursionContext\Exception;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Awcodes\FilamentBadgeableColumn\Components\Badge;
@@ -58,8 +59,13 @@ class RecotizacionResource extends Resource
                             ->disabled(),
 
                         TextInput::make('identificacion')
-                            ->label('Identificación de la mesada')
-                            ->columnSpanFull(),
+                            ->label('Identificación de la mesada'),
+
+                        DatePicker::make('medido')
+                            ->label('Fue medida el')
+                            ->timezone('America/Argentina/Buenos_Aires')
+                            ->displayFormat('d/m/Y')
+                            ->disabled(),
                     ])
                     ->columnSpan(2),
                 Fieldset::make('Estado')
@@ -104,6 +110,16 @@ class RecotizacionResource extends Resource
                             ->timezone('America/Argentina/Buenos_Aires')
                             ->displayFormat('d/m/Y')
                             ->columnSpan(1),
+
+                        Select::make('confirmacion')
+                            ->label('Confirmación de la mesada')
+                            ->helperText('En caso de que el cliente haya dejado una seña marcar el pedido como "Confirmado". De lo contrario, seleccionar "No confirmado" para redireccionar la orden a la solapa "A confirmar"')
+                            ->options([
+                                "No seleccionado" => '🔔 No seleccionado',
+                                "No confirmado" => '❌ No confirmado',
+                                "Confirmado" => '🤩 Confirmado'
+                            ])
+                            ->default('No seleccionado')
                     ])
                     ->columns(2)
             ])
@@ -116,8 +132,6 @@ class RecotizacionResource extends Resource
             ->columns([
                 TextColumn::make('')
                     ->label('Estado')
-                    ->searchable()
-                    ->sortable()
                     ->getStateUsing(function ($record): ?string {
                         try {
                             $estado = $record->estado;
@@ -141,6 +155,8 @@ class RecotizacionResource extends Resource
                 TextColumn::make('medido')
                     ->label('Medido hace')
                     ->since()
+                    ->searchable()
+                    ->sortable()
                     ->getStateUsing(function ($record): ?string {
                         try {
                             $estado = $record->estado;
@@ -200,6 +216,15 @@ class RecotizacionResource extends Resource
                         'Medido' => 'Medido'
                     ])
                     ->default('Medido'),
+
+                SelectFilter::make('confirmacion')
+                    ->label('Confirmacion')
+                    ->options([
+                        'No seleccionado' => 'No seleccionado',
+                        'Confirmado' => 'Confirmado'
+                    ])
+                    ->multiple()
+                    ->default((['No seleccionado', 'Confirmado'])),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
