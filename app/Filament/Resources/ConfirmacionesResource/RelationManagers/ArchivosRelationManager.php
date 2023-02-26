@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\PedidoResource\RelationManagers;
+namespace App\Filament\Resources\ConfirmacionesResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;

@@ -10,7 +10,7 @@ class Archivo extends Model
     use HasFactory;
 
     protected $fillable = [
-        'pedido_id', 'identificacion', 'categoria', 'tipo', 'archivo'
+        'pedido_id', 'identificacion', 'categoria', 'tipo', 'archivo', 'dropbox'
     ];
 
     protected $guarded = [

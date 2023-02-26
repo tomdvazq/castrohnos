@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('pedido_id');
             $table->string('identificacion')
                 ->nullable();
-            $table->enum('categoria', ['Factura', 'Nota de crédito', 'Nota de débito', 'Archivo', 'Link'])
+            $table->enum('categoria', ['Factura', 'Nota de crédito', 'Nota de débito', 'Archivo'])
                 ->nullable();
             $table->enum('tipo', ['AutoCAD', 'PDF', 'Excel', 'Dropbox'])
                 ->nullable();

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\PedidoResource\RelationManagers;
+namespace App\Filament\Resources\RecotizacionResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
