@@ -88,7 +88,7 @@ class MedicionesResource extends Resource
                             ->displayFormat('d/m/Y'),
                         ])
                         ->columnSpan(1),
-                Fieldset::make('Herramientas')
+                Fieldset::make('Herramientas del medidor')
                     ->schema([
                         Select::make('estado')
                             ->label('¿Esta mesada ya fue medida?')

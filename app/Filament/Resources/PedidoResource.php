@@ -197,6 +197,7 @@ class PedidoResource extends Resource
         return [
             RelationManagers\MaterialesSelectionsRelationManager::class,
             RelationManagers\ClientesRelationManager::class,
+            RelationManagers\ArchivosRelationManager::class,
         ];
     }
     

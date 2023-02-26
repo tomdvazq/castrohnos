@@ -36,6 +36,11 @@ class Pedido extends Model
         return $this->hasMany(MaterialesSelection::class);
     }
 
+    public function archivos()
+    {
+        return $this->hasMany(Archivo::class, 'pedido_id');
+    }
+
     public function materials()
     {
         return $this->hasMany(Material::class);

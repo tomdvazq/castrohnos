@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
@@ -73,6 +74,7 @@ class RecotizacionResource extends Resource
                 Fieldset::make('Estado')
                     ->schema([
                         Select::make('estado')
+                            ->label('Actualmente en')
                             ->options([
                                 // 'Medir' => 'Medir',
                                 // 'Avisa para medir' => 'Avisa para medir',
@@ -95,40 +97,55 @@ class RecotizacionResource extends Resource
                     ])
                     ->columnSpan(2),
 
-                Fieldset::make('Herramientas')
+                Fieldset::make('Herramientas del medidor')
                     ->schema([
-                        Select::make('estado')
-                            ->label('Devolver pedido a mediciones')
-                            ->options([
-                                'Remedir' => '📏 Devolver a mediciones',
+                        Section::make('📏 Devolver a mediciones')
+                            ->schema([
+                                Select::make('estado')
+                                    ->label('Devolver pedido a mediciones')
+                                    ->options([
+                                        'Remedir' => '📏 Devolver a mediciones',
+                                    ])
+                                    ->helperText('En caso de que haya habido algún error en las medidas, puede seleccionar "📏 Devolver a mediciones". Automáticamente el pedido será redireccionado a "Mediciones".')
+                                    ->placeholder('👌 No es necesario')
+                                    ->columnSpan(1),
+
+                                DatePicker::make('remedir')
+                                    ->label('Fecha en la que el pedido volvió a mediciones')
+                                    ->helperText('Sí existe una fecha como valor actual en este campo, será debido a que el pedido ya fue remedido alguna vez. En caso de que eso suceda, haga click sobre el campo y modifique la fecha.')
+                                    ->timezone('America/Argentina/Buenos_Aires')
+                                    ->displayFormat('d/m/Y')
+                                    ->columnSpan(1),
+
+
                             ])
-                            ->helperText('En caso de que haya habido algún error en las medidas, puede seleccionar "📏 Devolver a mediciones". Tenga en cuenta que el pedido volverá a la solapa de mediciones y ya no será visualizado en recotización.')
-                            ->placeholder('👌 No es necesario')
-                            ->columnSpan(1),
+                            ->columns(1)
+                            ->collapsed()
+                            ->columnSpan(3),
 
-                        DatePicker::make('remedir')
-                            ->label('Fecha en la que el pedido volvió a mediciones')
-                            ->helperText('Sí existe una fecha como valor actual en este campo, será debido a que el pedido ya fue remedido alguna vez. En caso de que eso suceda, haga click sobre el campo y modifique la fecha.')
-                            ->timezone('America/Argentina/Buenos_Aires')
-                            ->displayFormat('d/m/Y')
-                            ->columnSpan(1),
+                        Section::make('✅ Confirmación de la orden')
+                            ->schema([
+                                Select::make('confirmacion')
+                                    ->label('Confirmación del pedido')
+                                    ->helperText('Sí la orden no ha recibido una seña aún, marcarla como "No confirmado". Automáticamente el pedido será redireccionado a la solapa "A confirmar".')
+                                    ->options([
+                                        "No seleccionado" => '🔔 No seleccionado',
+                                        "No confirmado" => '❌ No confirmado',
+                                        "Confirmado" => '🤩 Confirmado'
+                                    ])
+                                    ->default('No seleccionado'),
 
-                        Select::make('confirmacion')
-                            ->label('Confirmación del pedido')
-                            ->helperText('En caso de que el cliente haya dejado una seña marcar el pedido como "Confirmado". De lo contrario, seleccionar "No confirmado" para redireccionar la orden a la solapa "A confirmar"')
-                            ->options([
-                                "No seleccionado" => '🔔 No seleccionado',
-                                "No confirmado" => '❌ No confirmado',
-                                "Confirmado" => '🤩 Confirmado'
+                                TextInput::make('seña')
+                                    ->label('Valor de la seña')
+                                    ->helperText('En caso de que el pedido haya sido marcado como "Confirmado" aclarar cuanto dinero dejó de seña. Tenga en cuenta que este campo es un tipo de dato numérico y no permite letras ni signos especiales.')
+                                    ->mask(fn (TextInput\Mask $mask) => $mask->money(prefix: '$ ', thousandsSeparator: ',', decimalPlaces: 2, isSigned: false))
                             ])
-                            ->default('No seleccionado'),
-
-                        TextInput::make('seña')
-                            ->label('Valor de la seña')
-                            ->helperText('En caso de que el pedido haya sido marcado como "Confirmado" aclarar cuanto dinero dejó de seña. Tenga en cuenta que este campo es un tipo de dato numérico y no permite letras ni signos especiales.')
-                            ->mask(fn (TextInput\Mask $mask) => $mask->money(prefix: '$ ', thousandsSeparator: ',', decimalPlaces: 2, isSigned: false))
+                            ->columns(1)
+                            ->collapsed()
+                            ->columnSpan(3)
                     ])
-                    ->columns(2)
+                    ->columnSpan(6)
+                    ->columns(6)
             ])
             ->columns(6);
     }
@@ -185,7 +202,7 @@ class RecotizacionResource extends Resource
                                     $actual = '<span style="background-color:#CB4335; font-size:12px; padding: 3px; font-weight: bold; color: white; border: solid 2px #000">RECOTIZAR</span>';
                                 }
 
-                                $total = $result->diffInDays() . " días " . $actual ;
+                                $total = $result->diffInDays() . " días " . $actual;
                             }
 
 
