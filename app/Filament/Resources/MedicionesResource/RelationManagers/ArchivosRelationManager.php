@@ -36,7 +36,6 @@ class ArchivosRelationManager extends RelationManager
                         'Nota de crédito' => 'Nota de crédito',
                         'Nota de débito' => 'Nota de débito',
                         'Archivo' => 'Archivo',
-                        'Link' => 'Link'
                     ])
                     ->columnSpan(1),
                 Select::make('tipo')

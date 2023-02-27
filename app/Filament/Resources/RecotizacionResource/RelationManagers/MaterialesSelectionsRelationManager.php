@@ -14,6 +14,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
+use Illuminate\Support\HtmlString;
 
 class MaterialesSelectionsRelationManager extends RelationManager
 {
@@ -50,20 +51,30 @@ class MaterialesSelectionsRelationManager extends RelationManager
                     ->afterStateUpdated(function ($set, $get) {
                         $id = MaterialListado::find($get('material_listado_id'));
                         $material = $id?->material;
+                        $stock = $id->stock;
 
                         $set('material', $material);
+                        $set('stock', $stock);
                     })
+                    ->reactive()
                     ->searchable(),
 
                 TextInput::make('cantidad')
                     ->label('Cantidad')
                     ->afterStateUpdated(function ($set, $get) {
                         $material = MaterialListado::find($get('material_listado_id'));
-                        $stock = $material?->stock ?? 0;
                         $m2 = $get('cantidad');
+                        $stock = $material->stock;
 
-                        $set($stock, intval($stock) - intval($m2));
+                        $material->stock = intval($stock) - intval($m2);
+
+                        $material->save();
                     })
+                    ->numeric()
+                    ->suffix('m²'),
+
+                TextInput::make('stock')
+                    ->label('Stock del material')
                     ->numeric()
                     ->suffix('m²'),
 
@@ -110,9 +121,12 @@ class MaterialesSelectionsRelationManager extends RelationManager
 
                         return $resultado;
                     }),
-                
+
                 TextColumn::make('cantidad')
                     ->label('Cantidad en m²')
+                    ->formatStateUsing(function ($record) {
+                        return $record->cantidad . ' m²';
+                    })
             ])
             ->filters([
                 //
@@ -122,7 +136,7 @@ class MaterialesSelectionsRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

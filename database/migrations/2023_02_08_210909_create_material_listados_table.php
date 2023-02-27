@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('material');
             $table->string('size')
                 ->nullable();
-            $table->integer('stock');
+            $table->decimal('stock', 19, 2);
             $table->timestamps();
 
             $table->foreign('material_id')->references('id')->on('materials');

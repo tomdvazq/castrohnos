@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('material_id');
             $table->unsignedBigInteger('material_listado_id');
             $table->string('material');
-            $table->float('cantidad');
+            $table->decimal('cantidad', 19, 2);
             $table->timestamps();
 
             $table->foreign('pedido_id')->references('id')->on('pedidos')->onDelete('cascade');

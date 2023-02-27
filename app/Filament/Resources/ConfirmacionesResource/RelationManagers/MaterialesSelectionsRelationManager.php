@@ -57,6 +57,7 @@ class MaterialesSelectionsRelationManager extends RelationManager
 
                 TextInput::make('cantidad')
                     ->label('Cantidad')
+                    ->required()
                     ->afterStateUpdated(function ($set, $get) {
                         $material = MaterialListado::find($get('material_listado_id'));
                         $stock = $material?->stock ?? 0;

@@ -96,7 +96,6 @@ class RecotizacionResource extends Resource
                             ->columnSpanFull()
                     ])
                     ->columnSpan(2),
-
                 Fieldset::make('Herramientas del medidor')
                     ->schema([
                         Section::make('📏 Devolver a mediciones')
@@ -145,7 +144,38 @@ class RecotizacionResource extends Resource
                             ->columnSpan(3)
                     ])
                     ->columnSpan(6)
-                    ->columns(6)
+                    ->columns(6),
+                Section::make(function($record){
+                    $res = '💹 Finanzas del pedido de ' . $record->clientes->nombre;
+
+                    return new HtmlString($res);
+                    })
+                    ->schema([
+                        TextInput::make('seña')
+                            ->label(function($record){
+                                $res = 'Seña de <b>' . $record->identificacion . '</b>';
+
+                                return new HtmlString($res);
+                            })
+                            ->disabled()
+                            ->helperText('')
+                            ->mask(fn (TextInput\Mask $mask) => $mask->money(prefix: '$ ', thousandsSeparator: ',', decimalPlaces: 2, isSigned: false)),
+                        TextInput::make('total')
+                            ->label(function($record){
+                                $res = 'Total actual de <b>' . $record->identificacion . '</b>';
+
+                                return new HtmlString($res);
+                            })
+                            ->afterStateHydrated(function ($set, $get){
+                                $id = Pedido::find($get('id'));
+                                $seña = $id?->seña;
+                                
+                                $set('total', $seña);
+                            })
+                            ->mask(fn (TextInput\Mask $mask) => $mask->money(prefix: '$ ', thousandsSeparator: ',', decimalPlaces: 2, isSigned: false)),
+                    ])
+                    ->collapsed()
+                    ->columnSpan(4)
             ])
             ->columns(6);
     }
