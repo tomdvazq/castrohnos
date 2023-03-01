@@ -5,6 +5,7 @@ namespace App\Filament\Resources\RecotizacionResource\RelationManagers;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Material;
+use App\Models\MaterialesSelection;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use App\Models\MaterialListado;
@@ -61,7 +62,7 @@ class MaterialesSelectionsRelationManager extends RelationManager
 
                 TextInput::make('cantidad')
                     ->label('Cantidad')
-                    ->afterStateUpdated(function ($set, $get) {
+                    ->saveRelationshipsUsing(function ($set, $get) {
                         $material = MaterialListado::find($get('material_listado_id'));
                         $m2 = $get('cantidad');
                         $stock = $material->stock;

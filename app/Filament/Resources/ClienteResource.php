@@ -34,11 +34,13 @@ class ClienteResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('nombre'),
+                TextInput::make('nombre')
+                    ->required(),
                 TextInput::make('direccion')
                     ->label('Dirección'),
                 TextInput::make('localidad'),
-                TextInput::make('contacto'),
+                TextInput::make('contacto')
+                    ->required(),
                 Fieldset::make('adicional')
                     ->label('Información adicional')
                     ->schema([

@@ -5,36 +5,40 @@ namespace App\Filament\Resources;
 use Exception;
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Corte;
 use App\Models\Pedido;
 use App\Models\Cliente;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
-use App\Models\MaterialListado;
 use Filament\Resources\Resource;
 use Illuminate\Support\HtmlString;
 use App\Models\MaterialesSelection;
+use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Fieldset;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\Actions\Action;
-use App\Filament\Resources\PedidoResource\Pages;
+use Filament\Tables\Actions\DeleteBulkAction;
+use App\Filament\Resources\CorteResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Resources\RelationManagers\RelationGroup;
-use App\Filament\Resources\PedidoResource\RelationManagers;
+use App\Filament\Resources\CorteResource\RelationManagers;
 
-class PedidoResource extends Resource
+class CorteResource extends Resource
 {
-    protected static ?string $model = Pedido::class;
+    protected static ?string $model = Corte::class;
 
-    protected static ?string $navigationGroup = 'Pedidos';
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
-    protected static ?int $navigationSort = 1;
-
+    protected static ?string $navigationGroup = 'Corte';
+    protected static ?string $navigationIcon = 'heroicon-o-scissors';
+    protected static ?string $navigationLabel = 'Corte';
+    protected static ?string $pluralModelLabel = 'Corte';
+    protected static ?string $modelLabel = 'Corte';
+    protected static ?string $slug = 'corte';
+    protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {
@@ -67,8 +71,6 @@ class PedidoResource extends Resource
                                 // 'Avisa para medir' => 'Avisa para medir',
                                 // 'Remedir' => 'Remedir',
                                 // 'Reclama medición' => 'Reclama medición',
-                                'Medido' => '✅ Medido',
-                                'Medida del cliente' => '📐 Medida del cliente',
                                 'Corte' => '🪓 Corte',
                                 'En taller' => '👩‍🔧 En taller',
                                 'Cortado' => '👍 Cortado',
@@ -204,15 +206,12 @@ class PedidoResource extends Resource
                 SelectFilter::make('estado')
                     ->label('Estado')
                     ->options([
-                        'Medido' => 'Medido',
-                        'Medida del cliente' => 'Medida del cliente',
                         'Corte' => 'Corte',
                         'En taller' => 'En taller',
                         'Cortado' => 'Cortado',
-                        'Entregas' => 'Entregas'
                     ])
                     ->multiple()
-                    ->default((['Medido', 'Medida del cliente', 'Corte', 'En taller', 'Cortado', 'Entregas'])),
+                    ->default((['Corte', 'En taller', 'Cortado'])),
 
                 SelectFilter::make('confirmacion')
                     ->label('Confirmación')
@@ -241,9 +240,9 @@ class PedidoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPedidos::route('/'),
-            'create' => Pages\CreatePedido::route('/create'),
-            'edit' => Pages\EditPedido::route('/{record}/edit'),
+            'index' => Pages\ListCortes::route('/'),
+            'create' => Pages\CreateCorte::route('/create'),
+            'edit' => Pages\EditCorte::route('/{record}/edit'),
         ];
     }
 
@@ -252,3 +251,4 @@ class PedidoResource extends Resource
         return false;
     }
 }
+

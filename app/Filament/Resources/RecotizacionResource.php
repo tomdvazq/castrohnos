@@ -184,28 +184,28 @@ class RecotizacionResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('')
-                    ->label('Estado')
-                    ->getStateUsing(function ($record): ?string {
-                        try {
-                            $estado = $record->estado;
-                            $result = "";
+                // TextColumn::make('')
+                //     ->label('Estado')
+                //     ->getStateUsing(function ($record): ?string {
+                //         try {
+                //             $estado = $record->estado;
+                //             $result = "";
 
-                            if ($estado === 'Medido') {
-                                $result = '<span style="font-size:12px; padding: 3px; font-weight: bold; color: #000000">MEDIDO</span>';
-                            } else {
-                                $result = 'Un error ha ocurrido';
-                            }
+                //             if ($estado === 'Medido') {
+                //                 $result = '<span style="font-size:12px; padding: 3px; font-weight: bold; color: #000000">MEDIDO</span>';
+                //             } else {
+                //                 $result = 'Un error ha ocurrido';
+                //             }
 
-                            return $result;
-                        } catch (\Exception $e) {
+                //             return $result;
+                //         } catch (\Exception $e) {
 
-                            return ($record->resize_date);
-                        }
-                    })
-                    ->formatStateUsing(function (string $state) {
-                        return new HtmlString($state);
-                    }),
+                //             return ($record->resize_date);
+                //         }
+                //     })
+                //     ->formatStateUsing(function (string $state) {
+                //         return new HtmlString($state);
+                //     }),
                 TextColumn::make('medido')
                     ->label('Medido hace')
                     ->since()
@@ -227,9 +227,9 @@ class RecotizacionResource extends Resource
                                 $dias = $segundos / 86400;
 
                                 if ($dias < 6) {
-                                    $actual = '<span style="background-color:#05CC2A; font-size:12px; padding: 3px; font-weight: bold; color: white; border: solid 2px #000">EN TIEMPO</span>';
+                                    $actual = '<span style="background-color:#05CC2A; font-size:10px; padding: 3px; font-weight: bold; color: white; border: solid 2px #000">EN TIEMPO</span>';
                                 } else {
-                                    $actual = '<span style="background-color:#CB4335; font-size:12px; padding: 3px; font-weight: bold; color: white; border: solid 2px #000">RECOTIZAR</span>';
+                                    $actual = '<span style="background-color:#CB4335; font-size:10px; padding: 3px; font-weight: bold; color: white; border: solid 2px #000">RECOTIZAR</span>';
                                 }
 
                                 $total = $result->diffInDays() . " días " . $actual;
@@ -260,8 +260,6 @@ class RecotizacionResource extends Resource
                 TextColumn::make('bacha_modelo')
                     ->label('Modelo de bacha'),
                 TextColumn::make('accesorio'),
-                TextColumn::make('estado')
-                    ->label('Estado')
             ])
             ->filters([
                 SelectFilter::make('estado')

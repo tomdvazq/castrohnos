@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Pedido;
 use App\Models\Cliente;
 use App\Models\Mediciones;
 use Filament\Resources\Form;
@@ -148,13 +149,13 @@ class MedicionesResource extends Resource
                             $result = "";
 
                             if ($estado === 'Medir') {
-                                $result = '<span style="background-color:#27AE60; font-size:12px; padding: 3px; font-weight: bold; color: white">MEDIR</span>';
+                                $result = '<span style="border: solid 2px black; background-color:#27AE60; font-size:12px; padding: 3px; font-weight: bold; color: white">MEDIR</span>';
                             } elseif ($estado === 'Reclama medición') {
-                                $result = '<span style="background-color:#CB4335; font-size:12px; padding: 3px; font-weight: bold; color: white">RECLAMA MEDICIÓN</span>';   
+                                $result = '<span style="border: solid 2px black; background-color:#CB4335; font-size:12px; padding: 3px; font-weight: bold; color: white">RECLAMA MEDICIÓN</span>';   
                             } elseif ($estado === 'Remedir') {
-                                $result = '<span style="background-color:#992FC4; font-size:12px; padding: 3px; font-weight: bold; color: white">REMEDIR</span>';
+                                $result = '<span style="border: solid 2px black; background-color:#992FC4; font-size:12px; padding: 3px; font-weight: bold; color: white">REMEDIR</span>';
                             } elseif ($estado === 'Avisa para medir') {
-                                $result = '<span style="background-color:#11D3F1; font-size:12px; padding: 3px; font-weight: bold; color: white">AVISA PARA MEDIR</span>';
+                                $result = '<span style="border: solid 2px black; background-color:#11D3F1; font-size:12px; padding: 3px; font-weight: bold; color: white">AVISA PARA MEDIR</span>';
                             }
 
                             return $result;
