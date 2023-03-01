@@ -32,7 +32,7 @@ class ConfirmacionesResource extends Resource
     protected static ?string $pluralModelLabel = 'A confirmar';
     protected static ?string $modelLabel = 'A confirmar';
     protected static ?string $slug = 'a-confirmar';
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 8;
 
     public static function form(Form $form): Form
     {

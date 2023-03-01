@@ -38,7 +38,7 @@ class CorteResource extends Resource
     protected static ?string $pluralModelLabel = 'Corte';
     protected static ?string $modelLabel = 'Corte';
     protected static ?string $slug = 'corte';
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 9;
 
     public static function form(Form $form): Form
     {
