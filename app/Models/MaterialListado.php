@@ -26,4 +26,9 @@ class MaterialListado extends Model
     {
         return $this->belongsTo(MaterialesSelection::class);
     }
+
+    public function piedras_selections()
+    {
+        return $this->belongsTo(PiedrasSelection::class);
+    }
 }

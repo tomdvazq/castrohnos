@@ -15,7 +15,21 @@ return new class extends Migration
     {
         Schema::create('pedido_piedras', function (Blueprint $table) {
             $table->id();
+            // Base de datos de los pedidos de piedras: Relación con cliente y datos básicos
+            $table->unsignedBigInteger('cliente_id');
+            $table->string('identificacion');
+            $table->enum('estado', ['Retira', 'Avisa por la entrega', 'Entregar', 'Reclama entrega de piedras'])
+                ->nullable();
+            // Base de datos de los pedidos de piedras: Fechas
+            $table->date('entrega')
+                ->nullable();
+            // Base de datos de los pedidos de piedras: señas
+            $table->decimal('seña', 19,2)
+                ->nullable();
+            // Base de datos de los pedidos de piedras: TimeStamps
             $table->timestamps();
+
+            $table->foreign('cliente_id')->references('id')->on('clientes');
         });
     }
 

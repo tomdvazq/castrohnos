@@ -25,7 +25,7 @@ class NuevoPiedraResource extends Resource
     protected static ?string $navigationLabel = 'Nuevo';
     protected static ?string $pluralModelLabel = 'Clientes';
     protected static ?string $modelLabel = 'cliente';
-    protected static ?string $slug = 'piedras/nuevo/cliente';
+    protected static ?string $slug = 'piedras/nuevo-cliente';
     protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
