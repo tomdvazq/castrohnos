@@ -1,21 +1,18 @@
 <?php
 
-namespace App\Filament\Resources\ClienteResource\RelationManagers;
+namespace App\Filament\Resources\ListaClienteResource\RelationManagers;
 
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Cliente;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
-use App\Models\MaterialListado;
-use App\Models\MaterialesSelection;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
-use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\TextInput\Mask;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
 
@@ -42,10 +39,11 @@ class PedidosRelationManager extends RelationManager
                 Select::make('estado')
                     ->label('Estado del pedido')
                     ->options([
-                        'Medir' => 'Medir',
-                        'Avisa para medir' => 'Avisa para medir',
-                        'Remedir' => 'Remedir',
-                        'Reclama medición' => 'Reclama medición',
+                        'Medir' => '🟢 Medir',
+                        'Avisa para medir' => '🔵 Avisa para medir',
+                        'Remedir' => '🟣 Remedir',
+                        'Reclama medición' => '🟠 Reclama medición',
+                        'Medido' => '✅ Medido',
                         'Medida del cliente' => '📐 Medida del cliente',
                         'Corte' => '🪓 Corte',
                         'En taller' => '👩‍🔧 En taller',
@@ -71,7 +69,7 @@ class PedidosRelationManager extends RelationManager
                 TextInput::make('seña')
                     ->label('Valor de la seña')
                     ->helperText('En caso de que el pedido haya sido marcado como "Confirmado" aclarar cuanto dinero dejó de seña. Tenga en cuenta que este campo es un tipo de dato numérico y no permite letras ni signos especiales.')
-                    ->mask(fn (TextInput\Mask $mask) => $mask->money(prefix: '$ ', thousandsSeparator: ',', decimalPlaces: 2, isSigned: false))
+                    ->mask(fn (Mask $mask) => $mask->money(prefix: '$ ', thousandsSeparator: ',', decimalPlaces: 2, isSigned: false))
 
             ]);
     }

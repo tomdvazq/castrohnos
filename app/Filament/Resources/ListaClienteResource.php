@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\NuevoPiedra;
+use App\Models\ListaCliente;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
@@ -13,20 +13,19 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\NuevoPiedraResource\Pages;
-use App\Filament\Resources\NuevoPiedraResource\RelationManagers;
+use App\Filament\Resources\ListaClienteResource\Pages;
+use App\Filament\Resources\ListaClienteResource\RelationManagers;
 
-class NuevoPiedraResource extends Resource
+class ListaClienteResource extends Resource
 {
-    protected static ?string $model = NuevoPiedra::class;
+    protected static ?string $model = ListaCliente::class;
 
-    protected static ?string $navigationGroup = 'Piedras';
-    protected static ?string $navigationIcon = 'heroicon-o-plus-circle';
-    protected static ?string $navigationLabel = 'Nuevo';
+    protected static ?string $navigationIcon = 'heroicon-o-collection';
+
+    protected static ?string $navigationLabel = 'Cliente';
     protected static ?string $pluralModelLabel = 'Clientes';
-    protected static ?string $modelLabel = 'cliente';
-    protected static ?string $slug = 'piedras/nuevo-cliente';
-    protected static ?int $navigationSort = 5;
+    protected static ?string $modelLabel = 'Cliente';
+    protected static ?string $slug = 'clientes';
 
     public static function form(Form $form): Form
     {
@@ -82,6 +81,7 @@ class NuevoPiedraResource extends Resource
     public static function getRelations(): array
     {
         return [
+            RelationManagers\PedidosRelationManager::class,
             RelationManagers\PedidoPiedrasRelationManager::class,
         ];
     }
@@ -89,8 +89,14 @@ class NuevoPiedraResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\CreateNuevoPiedra::route('/create'),
-            'edit' => Pages\EditNuevoPiedra::route('/{record}/edit'),
+            'index' => Pages\ListListaClientes::route('/'),
+            'create' => Pages\CreateListaCliente::route('/create'),
+            'edit' => Pages\EditListaCliente::route('/{record}/edit'),
         ];
     }    
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
 }

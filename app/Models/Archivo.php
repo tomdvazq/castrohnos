@@ -21,4 +21,9 @@ class Archivo extends Model
     {
         return $this->belongsTo(Pedido::class, 'pedido_id');
     }
+
+    public function pedido_piedras()
+    {
+        return $this->belongsTo(PedidoPiedra::class, 'pedido_id');
+    }
 }

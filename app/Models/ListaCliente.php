@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class NuevoPiedra extends Model
+class ListaCliente extends Model
 {
     use HasFactory;
 
@@ -18,6 +18,11 @@ class NuevoPiedra extends Model
     protected $guarded = [
         'id'
     ];
+
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class, 'cliente_id');
+    }
 
     public function pedido_piedras()
     {

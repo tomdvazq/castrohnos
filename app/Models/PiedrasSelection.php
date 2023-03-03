@@ -17,6 +17,17 @@ class PiedrasSelection extends Model
         'id'
     ];
 
+    public function pedido_piedra()
+    {
+        return $this->belongsTo(PedidoPiedra::class, 'pedido_id');
+    }
+    
+
+    public function materiales()
+    {
+        return $this->belongsTo(Material::class, 'material_id');
+    }
+
     public function materialesStock()
     {
         return $this->hasMany(MaterialListado::class);
