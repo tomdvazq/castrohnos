@@ -22,7 +22,7 @@ class ListaClienteResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
-    protected static ?string $navigationLabel = 'Cliente';
+    protected static ?string $navigationLabel = 'Clientes';
     protected static ?string $pluralModelLabel = 'Clientes';
     protected static ?string $modelLabel = 'Cliente';
     protected static ?string $slug = 'clientes';
