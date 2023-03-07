@@ -36,11 +36,13 @@ class NuevoResource extends Resource
             ->schema([
                 TextInput::make('nombre')
                     ->required(),
-                TextInput::make('direccion')
-                    ->label('Dirección'),
-                TextInput::make('localidad'),
                 TextInput::make('contacto')
                     ->required(),
+                TextInput::make('direccion')
+                    ->label('Dirección'),
+                TextInput::make('direccion_detalles')
+                    ->label('Entrecalles'),
+                TextInput::make('localidad'),
                 Fieldset::make('adicional')
                     ->label('Información adicional')
                     ->schema([
