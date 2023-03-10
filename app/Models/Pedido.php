@@ -31,15 +31,12 @@ class Pedido extends Model
         return $this->belongsTo(Cliente::class, 'cliente_id');
     }
 
-    public function materiales_selections()
-    {
-        return $this->hasMany(MaterialesSelection::class);
-    }
-
     public function archivos()
     {
         return $this->hasMany(Archivo::class, 'pedido_id');
     }
+
+    // Relacion con base de datos de materiales
 
     public function materials()
     {
@@ -51,13 +48,25 @@ class Pedido extends Model
         return $this->belongsTo(MaterialListado::class, 'material');
     }
 
+    public function materiales_selections()
+    {
+        return $this->hasMany(MaterialesSelection::class);
+    }
+
+    // Relacion con base de datos de bachas
+
     public function bachas()
     {
         return $this->hasMany(Bachas::class);
     }
 
-    public function bachalistados()
+    public function bachasStock()
     {
-        return $this->hasMany(BachaListado::class);
+        return $this->belongsTo(BachaListado::class, 'material');
+    }
+
+    public function bachas_selections()
+    {
+        return $this->hasMany(BachasSelection::class);
     }
 }

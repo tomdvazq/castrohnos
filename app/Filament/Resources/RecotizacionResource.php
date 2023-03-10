@@ -290,6 +290,7 @@ class RecotizacionResource extends Resource
     {
         return [
             RelationManagers\MaterialesSelectionsRelationManager::class,
+            RelationManagers\BachasSelectionsRelationManager::class,
             RelationManagers\ClientesRelationManager::class,
             RelationManagers\ArchivosRelationManager::class,
         ];

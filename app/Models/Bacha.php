@@ -17,8 +17,13 @@ class Bacha extends Model
         'id'
     ];
 
-    public function bachalistados()
+    public function bachasStock()
     {
-        return $this->belongsToMany(BachaListado::class);
+        return $this->hasMany(BachaListado::class);
+    }
+
+    public function bachas_selections()
+    {
+        return $this->hasMany(BachasSelection::class, 'tipo');
     }
 }

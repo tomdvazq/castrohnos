@@ -21,4 +21,9 @@ class BachaListado extends Model
     {
         return $this->belongsToMany(Bacha::class);
     }
+
+    public function bachas_selections()
+    {
+        return $this->belongsTo(BachasSelection::class);
+    }
 }

@@ -5,17 +5,18 @@ namespace App\Filament\Resources\RecotizacionResource\RelationManagers;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Material;
-use App\Models\MaterialesSelection;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use App\Models\MaterialListado;
+use Illuminate\Support\HtmlString;
+use App\Models\MaterialesSelection;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
-use Illuminate\Support\HtmlString;
 
 class MaterialesSelectionsRelationManager extends RelationManager
 {
@@ -29,60 +30,122 @@ class MaterialesSelectionsRelationManager extends RelationManager
     public static function form(Form $form): Form
     {
         return $form
+            // ->schema([
+            //     Select::make('material_id')
+            //         ->options(Material::all()->pluck('tipo', 'id')->toArray())
+            //         ->label('Tipo de material')
+            //         ->afterStateUpdated(fn (callable $set) => $set('material_listado_id', null))
+            //         ->reactive(),
+
+            //     Select::make('material_listado_id')
+            //         ->label('Material')
+            //         ->options(function (callable $get) {
+            //             $material = Material::find($get('material_id'));
+
+            //             if (!$material) {
+            //                 return MaterialListado::all()->pluck('material', 'id');
+            //             }
+
+            //             $value = $material->materialesStock->pluck('material', 'id');
+
+            //             return $value;
+            //         })
+            //         ->afterStateUpdated(function ($set, $get) {
+            //             $id = MaterialListado::find($get('material_listado_id'));
+            //             $material = $id?->material;
+            //             $stock = $id->stock;
+
+            //             $set('material', $material);
+            //             $set('stock', $stock);
+            //         })
+            //         ->reactive()
+            //         ->searchable(),
+
+            //     TextInput::make('cantidad')
+            //         ->label('Cantidad')
+            //         ->saveRelationshipsUsing(function ($set, $get) {
+            //             $material = MaterialListado::find($get('material_listado_id'));
+            //             $m2 = $get('cantidad');
+            //             $stock = $material->stock;
+
+            //             $material->stock = intval($stock) - intval($m2);
+
+            //             $material->save();
+            //         })
+            //         ->numeric()
+            //         ->suffix('m²'),
+
+            //     TextInput::make('stock')
+            //         ->label('Stock del material')
+            //         ->numeric()
+            //         ->suffix('m²'),
+
+            //     TextInput::make('material')
+            //         ->label('Renderización de materiales')
+            //         ->lazy()
+            //         ->columnSpan('full')
+            // ])
             ->schema([
-                Select::make('material_id')
-                    ->options(Material::all()->pluck('tipo', 'id')->toArray())
-                    ->label('Tipo de material')
-                    ->afterStateUpdated(fn (callable $set) => $set('material_listado_id', null))
-                    ->reactive(),
+                Fieldset::make('Selección de material')
+                    ->schema([
+                        Select::make('material_id')
+                            ->options(Material::all()->pluck('tipo', 'id')->toArray())
+                            ->label('Tipo de material')
+                            ->afterStateUpdated(fn (callable $set, $get) => $set('material_listado_id', null))
+                            ->reactive(),
 
-                Select::make('material_listado_id')
-                    ->label('Material')
-                    ->options(function (callable $get) {
-                        $material = Material::find($get('material_id'));
+                        Select::make('material_listado_id')
+                            ->label('Material')
+                            ->options(function (callable $get) {
+                                $material = Material::find($get('material_id'));
 
-                        if (!$material) {
-                            return MaterialListado::all()->pluck('material', 'id');
-                        }
+                                if (!$material) {
+                                    return MaterialListado::all()->pluck('material', 'id');
+                                }
 
-                        $value = $material->materialesStock->pluck('material', 'id');
+                                $value = $material->materialesStock->pluck('material', 'id');
 
-                        return $value;
-                    })
-                    ->afterStateUpdated(function ($set, $get) {
-                        $id = MaterialListado::find($get('material_listado_id'));
-                        $material = $id?->material;
-                        $stock = $id->stock;
+                                return $value;
+                            })
+                            ->afterStateUpdated(function ($set, $get) {
+                                $id = MaterialListado::find($get('material_listado_id'));
+                                $material = $id?->material;
+                                $stock = $id->stock;
 
-                        $set('material', $material);
-                        $set('stock', $stock);
-                    })
-                    ->reactive()
-                    ->searchable(),
+                                $set('material', $material);
+                                $set('stock', $stock);
+                            })
+                            ->reactive()
+                            ->searchable(),
+                    ]),
 
-                TextInput::make('cantidad')
-                    ->label('Cantidad')
-                    ->saveRelationshipsUsing(function ($set, $get) {
-                        $material = MaterialListado::find($get('material_listado_id'));
-                        $m2 = $get('cantidad');
-                        $stock = $material->stock;
+                Fieldset::make('Cantidad y stock')
+                    ->schema([
+                        TextInput::make('cantidad')
+                            ->label('Cantidad')
+                            ->saveRelationshipsUsing(function ($set, $get) {
+                                $material = MaterialListado::find($get('material_listado_id'));
+                                $m2 = $get('cantidad');
+                                $stock = $material->stock;
 
-                        $material->stock = intval($stock) - intval($m2);
+                                $material->stock = intval($stock) - intval($m2);
 
-                        $material->save();
-                    })
-                    ->numeric()
-                    ->suffix('m²'),
+                                $material->save();
+                            })
+                            ->numeric()
+                            ->suffix('m²'),
 
-                TextInput::make('stock')
-                    ->label('Stock del material')
-                    ->numeric()
-                    ->suffix('m²'),
+                        TextInput::make('stock')
+                            ->label('Stock del material')
+                            ->numeric()
+                            ->suffix('m²'),
+                    ]),
 
                 TextInput::make('material')
-                    ->label('Renderización de materiales')
+                    ->label('')
                     ->lazy()
                     ->columnSpan('full')
+                    ->extraAttributes(['style' => 'display: none'])
             ])
             ->columns(3);
     }
