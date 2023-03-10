@@ -33,6 +33,9 @@ class PedidosRelationManager extends RelationManager
 {
     protected static string $relationship = 'pedidos';
 
+    protected static ?string $pluralModelLabel = 'Mesadas';
+    protected static ?string $modelLabel = 'mesada';
+
     protected static ?string $recordTitleAttribute = 'cliente_id';
 
     public static function form(Form $form): Form
@@ -197,9 +200,10 @@ class PedidosRelationManager extends RelationManager
                                 ]),
 
                             TextInput::make('material')
-                                ->label('Renderización de materiales')
+                                ->label('')
                                 ->lazy()
                                 ->columnSpan('full')
+                                ->extraAttributes(['style' => 'display: none'])
                                 ->saveRelationshipsUsing(function ($get, $record) {
 
                                     $lastSelectionId = MaterialesSelection::all()->last()->id;
@@ -228,12 +232,5 @@ class PedidosRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            RelationManagers\MaterialesSelectionsRelationManager::class,
-        ];
     }
 }

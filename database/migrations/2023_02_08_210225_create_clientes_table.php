@@ -19,6 +19,10 @@ return new class extends Migration
                 ->nullable();
             $table->string('direccion')
                 ->nullable();
+            $table->string('entracalle_1')
+                ->nullable();
+            $table->string('entrecalle_2')
+                ->nullable();
             $table->string('direccion_detalles')
                 ->nullable();
             $table->string('localidad')
