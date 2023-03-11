@@ -10,7 +10,7 @@ class BachasSelection extends Model
     use HasFactory;
 
     protected $fillable = [
-        "pedido_id", "bacha_id", "bachas_listados_id", "cantidad", "material"
+        "pedido_id", "bacha_id", "bacha_listados_id", "cantidad", "material"
     ];
 
     protected $guarded = [
@@ -30,6 +30,6 @@ class BachasSelection extends Model
 
     public function bachasStock()
     {
-        return $this->hasMany(BachaListado::class);
+        return $this->hasMany(BachaListado::class, 'id');
     }
 }

@@ -14,6 +14,9 @@ class PedidoPiedrasRelationManager extends RelationManager
 {
     protected static string $relationship = 'pedido_piedras';
 
+    protected static ?string $pluralModelLabel = 'Piedras';
+    protected static ?string $modelLabel = 'piedra';
+
     protected static ?string $recordTitleAttribute = 'cliente_id';
 
     public static function form(Form $form): Form

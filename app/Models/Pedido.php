@@ -60,13 +60,13 @@ class Pedido extends Model
         return $this->hasMany(Bachas::class);
     }
 
-    public function bachasStock()
-    {
-        return $this->belongsTo(BachaListado::class, 'material');
-    }
-
     public function bachas_selections()
     {
         return $this->hasMany(BachasSelection::class);
+    }
+
+    public function bachasStock()
+    {
+        return $this->belongsTo(BachaListado::class, 'linea');
     }
 }

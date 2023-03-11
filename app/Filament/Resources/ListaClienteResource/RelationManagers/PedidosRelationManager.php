@@ -20,6 +20,9 @@ class PedidosRelationManager extends RelationManager
 {
     protected static string $relationship = 'pedidos';
 
+    protected static ?string $pluralModelLabel = 'mesadas';
+    protected static ?string $modelLabel = 'mesada';
+
     protected static ?string $recordTitleAttribute = 'cliente_id';
 
     public static function form(Form $form): Form

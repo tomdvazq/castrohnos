@@ -24,6 +24,6 @@ class Bacha extends Model
 
     public function bachas_selections()
     {
-        return $this->hasMany(BachasSelection::class, 'tipo');
+        return $this->hasMany(BachasSelection::class);
     }
 }

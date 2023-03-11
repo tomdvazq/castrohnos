@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('bachas_selections', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('pedido_id');
-            $table->unsignedBigInteger('bachas_id');
-            $table->unsignedBigInteger('bacha_listados');
+            $table->unsignedBigInteger('bacha_id');
+            $table->unsignedBigInteger('bacha_listados_id');
             $table->string('material');
-            $table->decimal('cantidad', 19, 2);
+            $table->integer('cantidad', 11);
             $table->timestamps();
 
             $table->foreign('pedido_id')->references('id')->on('pedidos')->onDelete('cascade');

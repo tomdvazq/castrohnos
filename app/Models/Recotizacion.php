@@ -62,9 +62,9 @@ class Recotizacion extends Model
         return $this->hasMany(Bachas::class);
     }
 
-    public function bachalistados()
+    public function bachasStock()
     {
-        return $this->hasMany(BachaListado::class);
+        return $this->hasMany(BachaListado::class, 'id');
     }
 
     public function bachas_selections()
