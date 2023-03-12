@@ -13,20 +13,21 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bachas_selections', function (Blueprint $table) {
+        Schema::create('accesorios_selections', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('pedido_id');
-            $table->unsignedBigInteger('bacha_id');
-            $table->unsignedBigInteger('bacha_listado_id');
-            $table->enum('tipo_bacha', ['Baño', 'Cocina'])
-            ->nullable();
+            $table->unsignedBigInteger('accesorio_id');
+            $table->unsignedBigInteger('accesorio_listado_id');
             $table->string('material');
             $table->integer('cantidad');
             $table->timestamps();
 
+            //Llave foránea del pedido
             $table->foreign('pedido_id')->references('id')->on('pedidos')->onDelete('cascade');
-            $table->foreign('bachas_id')->references('id')->on('bachas')->onDelete('cascade');
-            $table->foreign('bacha_listado_id')->references('id')->on('bacha_listados')->onDelete('cascade');
+            //Llave foránea de la marca del accesorio
+            $table->foreign('accesorio_id')->references('id')->on('accesorios')->onDelete('cascade');
+            //Llave foránea del tipo de accesorio
+            $table->foreign('accesorio_listado_id')->references('id')->on('accesorio_listados')->onDelete('cascade');
         });
     }
 
@@ -37,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bachas_selections');
+        Schema::dropIfExists('accesorios_selections');
     }
 };

@@ -71,4 +71,21 @@ class Recotizacion extends Model
     {
         return $this->hasMany(BachasSelection::class, 'pedido_id');
     }
+
+    // Relacion con base de datos de bachas
+
+    public function accesorios()
+    {
+        return $this->hasMany(Accesorios::class);
+    }
+
+    public function accesorios_selections()
+    {
+        return $this->hasMany(AccesoriosSelection::class, 'pedido_id');
+    }
+
+    public function accesoriosStock()
+    {
+        return $this->belongsTo(AccesorioListado::class, 'tipo');
+    }
 }

@@ -10,7 +10,7 @@ class BachasSelection extends Model
     use HasFactory;
 
     protected $fillable = [
-        "pedido_id", "bacha_id", "bacha_listados_id", "cantidad", "material"
+        "pedido_id", "bacha_id", "bacha_listado_id", "cantidad", "material"
     ];
 
     protected $guarded = [

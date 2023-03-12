@@ -255,11 +255,13 @@ class RecotizacionResource extends Resource
                     ->label('Identificación del pedido'),
                 TextColumn::make('materiales_selections.material')
                     ->label('Material')
+                    ->wrap()
                     ->searchable(),
-                TextColumn::make('bacha'),
-                TextColumn::make('bacha_modelo')
+                TextColumn::make('tipo_bacha'),
+                TextColumn::make('bachas_selections.material')
                     ->label('Modelo de bacha'),
-                TextColumn::make('accesorio'),
+                TextColumn::make('accesorios_selections.material')
+                    ->label('Accesorios'),
             ])
             ->filters([
                 SelectFilter::make('estado')
@@ -291,6 +293,7 @@ class RecotizacionResource extends Resource
         return [
             RelationManagers\MaterialesSelectionsRelationManager::class,
             RelationManagers\BachasSelectionsRelationManager::class,
+            RelationManagers\AccesoriosSelectionsRelationManager::class,
             RelationManagers\ClientesRelationManager::class,
             RelationManagers\ArchivosRelationManager::class,
         ];

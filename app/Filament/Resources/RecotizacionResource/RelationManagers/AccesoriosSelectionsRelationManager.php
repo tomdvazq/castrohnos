@@ -4,10 +4,10 @@ namespace App\Filament\Resources\RecotizacionResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Bacha;
-use App\Models\BachaListado;
+use App\Models\Accesorios;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
+use App\Models\AccesorioListado;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
@@ -16,12 +16,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
 
-class BachasSelectionsRelationManager extends RelationManager
+class AccesoriosSelectionsRelationManager extends RelationManager
 {
-    protected static string $relationship = 'bachas_selections';
+    protected static string $relationship = 'accesorios_selections';
 
-    protected static ?string $pluralModelLabel = 'Bachas';
-    protected static ?string $modelLabel = 'bacha';
+    protected static ?string $pluralModelLabel = 'Accesorios';
+    protected static ?string $modelLabel = 'accesorio';
 
     protected static ?string $recordTitleAttribute = 'pedido_id';
 
@@ -31,57 +31,49 @@ class BachasSelectionsRelationManager extends RelationManager
         ->schema([
             Fieldset::make('Selección de bacha')
                 ->schema([
-                    Select::make('tipo_bacha')
-                        ->label('Tipo de bacha')
-                        ->options([
-                            'Baño' => 'Baño',
-                            'Cocina' => 'Cocina'
-                        ])
-                        ->required(),
-                    Select::make('bacha_id')
-                        ->options(Bacha::all()->pluck('marca', 'id')->toArray())
+                    Select::make('accesorio_id')
+                        ->options(Accesorios::all()->pluck('marca', 'id')->toArray())
                         ->label('Marca')
-                        ->afterStateUpdated(fn (callable $set, $get) => $set('bacha_listado_id', null))
+                        ->afterStateUpdated(fn (callable $set, $get) => $set('accesorio_listado_id', null))
                         ->reactive(),
 
-                    Select::make('bacha_listado_id')
+                    Select::make('accesorio_listado_id')
                         ->label('Línea')
                         ->options(function (callable $get) {
-                            $bacha = Bacha::find($get('bacha_id'));
+                            $accesorio = Accesorios::find($get('accesorio_id'));
 
-                            if (!$bacha) {
-                                return BachaListado::all()->pluck('linea', 'id');
+                            if (!$accesorio) {
+                                return AccesorioListado::all()->pluck('tipo', 'id');
                             }
 
-                            $value = $bacha->bachasStock->pluck('linea', 'id');
+                            $value = $accesorio->accesoriosStock->pluck('tipo', 'id');
 
                             return $value;
                         })
                         ->afterStateUpdated(function ($set, $get) {
-                            $id = BachaListado::find($get('bacha_listado_id'));
-                            $bacha = $id?->linea;
+                            $id = AccesorioListado::find($get('accesorio_listado_id'));
+                            $accesorio = $id?->tipo;
                             $stock = $id->stock;
 
-                            $set('material', $bacha);
+                            $set('material', $accesorio);
                             $set('stock', $stock);
                         })
                         ->reactive()
                         ->searchable(),
-                ])
-                ->columns(3),
+                ]),
 
             Fieldset::make('Cantidad y stock')
                 ->schema([
                     TextInput::make('cantidad')
                         ->label('Cantidad')
                         ->saveRelationshipsUsing(function ($set, $get) {
-                            $bacha = BachaListado::find($get('bacha_listado_id'));
+                            $accesorio = AccesorioListado::find($get('accesorio_listado_id'));
                             $m2 = $get('cantidad');
-                            $stock = $bacha->stock;
+                            $stock = $accesorio->stock;
 
-                            $bacha->stock = intval($stock) - intval($m2);
+                            $accesorio->stock = intval($stock) - intval($m2);
 
-                            $bacha->save();
+                            $accesorio->save();
                         })
                         ->numeric()
                         ->suffix('U'),
@@ -105,16 +97,14 @@ class BachasSelectionsRelationManager extends RelationManager
     {
         return $table
         ->columns([
-            TextColumn::make('tipo_bacha')
-                ->label('Tipo de bacha'),
-            TextColumn::make('bacha_id')
+            TextColumn::make('accesorio_id')
                 ->label('Marca')
                 ->getStateUsing(function ($record) {
-                    $id = $record->bacha_id;
-                    $material_id = collect(Bacha::find($id, 'marca'));
+                    $id = $record->accesorio_id;
+                    $accesorio_id = collect(Accesorios::find($id, 'marca'));
                     $resultado = "";
 
-                    foreach ($material_id as $key => $value) {
+                    foreach ($accesorio_id as $key => $value) {
                         if ($value) {
                             $resultado .= $value;
                         }
@@ -123,14 +113,14 @@ class BachasSelectionsRelationManager extends RelationManager
                     return $resultado;
                 }),
 
-            TextColumn::make('bacha_listado_id')
+            TextColumn::make('accesorio_listado_id')
                 ->label('Línea')
                 ->getStateUsing(function ($record) {
-                    $id = $record->bacha_listado_id;
-                    $bacha_listado_id = collect(BachaListado::find($id, 'linea'));
+                    $id = $record->accesorio_listado_id;
+                    $accesorio_listado_id = collect(AccesorioListado::find($id, 'tipo'));
                     $resultado = "";
 
-                    foreach ($bacha_listado_id as $key => $value) {
+                    foreach ($accesorio_listado_id as $key => $value) {
                         if ($value) {
                             $resultado .= $value;
                         }
@@ -142,11 +132,11 @@ class BachasSelectionsRelationManager extends RelationManager
             TextColumn::make('modelo')
                 ->label('Modelo')
                 ->getStateUsing(function ($record) {
-                    $id = $record->bacha_listado_id;
-                    $bacha_listado_id = collect(BachaListado::find($id, 'modelo'));
+                    $id = $record->accesorio_listado_id;
+                    $accesorio_listado_id = collect(AccesorioListado::find($id, 'modelo'));
                     $resultado = "";
 
-                    foreach ($bacha_listado_id as $key => $value) {
+                    foreach ($accesorio_listado_id as $key => $value) {
                         if ($value) {
                             $resultado .= $value;
                         } else if (!$value){
