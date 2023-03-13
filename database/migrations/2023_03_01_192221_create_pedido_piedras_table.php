@@ -23,9 +23,6 @@ return new class extends Migration
             // Base de datos de los pedidos de piedras: Fechas
             $table->date('entrega')
                 ->nullable();
-            // Base de datos de los pedidos de piedras: señas
-            $table->decimal('seña', 19,2)
-                ->nullable();
             // Base de datos de los pedidos de piedras: TimeStamps
             $table->timestamps();
 

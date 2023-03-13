@@ -255,9 +255,9 @@ class RecotizacionResource extends Resource
                     ->label('Identificación del pedido'),
                 TextColumn::make('materiales_selections.material')
                     ->label('Material')
-                    ->wrap()
                     ->searchable(),
-                TextColumn::make('tipo_bacha'),
+                TextColumn::make('bachas_selections.tipo_bacha')
+                    ->label('Bacha'),
                 TextColumn::make('bachas_selections.material')
                     ->label('Modelo de bacha'),
                 TextColumn::make('accesorios_selections.material')

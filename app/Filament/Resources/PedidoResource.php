@@ -193,10 +193,14 @@ class PedidoResource extends Resource
                 TextColumn::make('materiales_selections.material')
                     ->label('Material')
                     ->searchable(),
-                TextColumn::make('bacha'),
-                TextColumn::make('bacha_modelo')
-                    ->label('Modelo de bacha'),
-                TextColumn::make('accesorio'),
+                TextColumn::make('bachas_selections.tipo_bacha')
+                    ->label('Bacha'),
+                TextColumn::make('bachas_selections.material')
+                    ->label('Modelo de bacha')
+                    ->searchable(),
+                TextColumn::make('accesorios_selections.material')
+                    ->label('Accesorios')
+                    ->searchable(),
                 TextColumn::make('estado')
                     ->label('Estado')
             ])
