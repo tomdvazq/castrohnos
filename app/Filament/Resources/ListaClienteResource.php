@@ -79,7 +79,7 @@ class ListaClienteResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
@@ -87,7 +87,7 @@ class ListaClienteResource extends Resource
             RelationManagers\PedidoPiedrasRelationManager::class,
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -95,7 +95,7 @@ class ListaClienteResource extends Resource
             'create' => Pages\CreateListaCliente::route('/create'),
             'edit' => Pages\EditListaCliente::route('/{record}/edit'),
         ];
-    }    
+    }
 
     public static function canCreate(): bool
     {

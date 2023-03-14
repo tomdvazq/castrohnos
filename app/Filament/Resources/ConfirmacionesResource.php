@@ -87,7 +87,7 @@ class ConfirmacionesResource extends Resource
                     ])
                     ->columnSpan(2),
 
-                    Fieldset::make('Herramientas del medidor')
+                Fieldset::make('Herramientas del medidor')
                     ->schema([
                         Section::make('📏 Devolver a mediciones')
                             ->schema([
@@ -192,7 +192,7 @@ class ConfirmacionesResource extends Resource
                                     $actual = '<span style="background-color:#CB4335; font-size:12px; padding: 3px; font-weight: bold; color: white; border: solid 2px #000">RECOTIZAR</span>';
                                 }
 
-                                $total = $result->diffInDays() . " días " . $actual ;
+                                $total = $result->diffInDays() . " días " . $actual;
                             }
 
 

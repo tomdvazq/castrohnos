@@ -251,4 +251,3 @@ class CorteResource extends Resource
         return false;
     }
 }
-

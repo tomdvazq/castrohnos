@@ -110,7 +110,7 @@ class MaterialesSelectionsRelationManager extends RelationManager
 
                         return $resultado;
                     }),
-                
+
                 TextColumn::make('cantidad')
                     ->label('Cantidad en m²')
             ])

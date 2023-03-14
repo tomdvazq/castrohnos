@@ -72,7 +72,8 @@ class PedidoPiedrasRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label('Nuevo pedido de piedras'),
             ])
             ->actions([
                 ActionGroup::make([
@@ -163,9 +164,22 @@ class PedidoPiedrasRelationManager extends RelationManager
                     ]),
                 ])
                 ->icon('heroicon-o-plus-circle')
-                ->color('success'),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                ->color('success')
+                ->label('Agregar piedra a este pedido')
+                ->tooltip('Agregar piedra a este pedido'),
+                Action::make('verPedido')
+                    ->label('Ir al pedido')
+                    ->url(function ($record) {
+                        $id = $record->id;
+
+                        return '/admin/piedras/'.$id.'/edit?activeRelationManager=0';
+                    })
+                    ->tooltip('Ver toda la información de este pedido')
+                    ->label('Ver toda la información de este pedido'),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

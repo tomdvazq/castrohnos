@@ -43,20 +43,20 @@ class MedicionesResource extends Resource
             ->schema([
                 Fieldset::make('Esta mesada')
                     ->schema([
-                    Select::make('cliente_id')
-                        ->label('Pertenece a')
-                        ->disabled()
-                        ->options(Cliente::all()->pluck('nombre', 'id')->toArray()),
+                        Select::make('cliente_id')
+                            ->label('Pertenece a')
+                            ->disabled()
+                            ->options(Cliente::all()->pluck('nombre', 'id')->toArray()),
 
-                    DatePicker::make('created_at')
-                        ->label('Fue ordenada el')
-                        ->timezone('America/Argentina/Buenos_Aires')
-                        ->displayFormat('d/m/Y')
-                        ->disabled(),
-                    
-                    TextInput::make('identificacion')
-                        ->label('Identificación de la mesada')
-                        ->columnSpanFull(),
+                        DatePicker::make('created_at')
+                            ->label('Fue ordenada el')
+                            ->timezone('America/Argentina/Buenos_Aires')
+                            ->displayFormat('d/m/Y')
+                            ->disabled(),
+
+                        TextInput::make('identificacion')
+                            ->label('Identificación de la mesada')
+                            ->columnSpanFull(),
                     ])
                     ->columnSpan(2),
 
@@ -78,17 +78,17 @@ class MedicionesResource extends Resource
                             ])
                             ->columnSpan('full'),
 
-                            DatePicker::make('remedir')
+                        DatePicker::make('remedir')
                             ->label('Remedir')
                             ->timezone('America/Argentina/Buenos_Aires')
                             ->displayFormat('d/m/Y'),
 
-                            DatePicker::make('avisa')
+                        DatePicker::make('avisa')
                             ->label('Avisa')
                             ->timezone('America/Argentina/Buenos_Aires')
                             ->displayFormat('d/m/Y'),
-                        ])
-                        ->columnSpan(1),
+                    ])
+                    ->columnSpan(1),
                 Fieldset::make('Herramientas del medidor')
                     ->schema([
                         Select::make('estado')
@@ -104,7 +104,7 @@ class MedicionesResource extends Resource
                             ->timezone('America/Argentina/Buenos_Aires')
                             ->displayFormat('d/m/Y')
                             ->columnSpan(1),
-                        ])
+                    ])
                     ->columns(2)
             ])
             ->columns(3);
@@ -151,7 +151,7 @@ class MedicionesResource extends Resource
                             if ($estado === 'Medir') {
                                 $result = '<span style="border: solid 2px black; background-color:#27AE60; font-size:12px; padding: 3px; font-weight: bold; color: white">MEDIR</span>';
                             } elseif ($estado === 'Reclama medición') {
-                                $result = '<span style="border: solid 2px black; background-color:#CB4335; font-size:12px; padding: 3px; font-weight: bold; color: white">RECLAMA MEDICIÓN</span>';   
+                                $result = '<span style="border: solid 2px black; background-color:#CB4335; font-size:12px; padding: 3px; font-weight: bold; color: white">RECLAMA MEDICIÓN</span>';
                             } elseif ($estado === 'Remedir') {
                                 $result = '<span style="border: solid 2px black; background-color:#992FC4; font-size:12px; padding: 3px; font-weight: bold; color: white">REMEDIR</span>';
                             } elseif ($estado === 'Avisa para medir') {
@@ -184,8 +184,8 @@ class MedicionesResource extends Resource
                                 $pasadoDeFecha = strtotime($record->created_at);
                                 $segundos = $hoy - $pasadoDeFecha;
                                 $dias = $segundos / 86400;
-                                
-                                if ($dias < 6){
+
+                                if ($dias < 6) {
                                     $actual = "🟢 ";
                                 } else {
                                     $actual = "🔴 ";
@@ -200,8 +200,8 @@ class MedicionesResource extends Resource
                                 $pasadoDeFecha = strtotime($record->remedir);
                                 $segundos = $hoy - $pasadoDeFecha;
                                 $dias = $segundos / 86400;
-                                
-                                if ($dias < 6){
+
+                                if ($dias < 6) {
                                     $actual = "🟢 ";
                                 } else {
                                     $actual = "🔴 ";
@@ -216,8 +216,8 @@ class MedicionesResource extends Resource
                                 $pasadoDeFecha = strtotime($record->avisa);
                                 $segundos = $hoy - $pasadoDeFecha;
                                 $dias = $segundos / 86400;
-                                
-                                if ($dias < 120){
+
+                                if ($dias < 120) {
                                     $actual = "🟢 ";
                                 } else {
                                     $actual = "<div style='display: flex; flex-direction: row; justify-content: center; align-items: center;'>🔴 <b style='font-size: 10px'>RECOTIZAR</b></div>";
@@ -260,8 +260,8 @@ class MedicionesResource extends Resource
                         'Remedir' => 'Remedir',
                         'Reclama medición' => 'Reclama medición',
                     ])
-                ->multiple()
-                ->default((['Medir', 'Avisa para medir', 'Remedir', 'Reclama medición'])),
+                    ->multiple()
+                    ->default((['Medir', 'Avisa para medir', 'Remedir', 'Reclama medición'])),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -270,7 +270,7 @@ class MedicionesResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
@@ -279,7 +279,7 @@ class MedicionesResource extends Resource
             RelationManagers\ArchivosRelationManager::class,
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -288,7 +288,7 @@ class MedicionesResource extends Resource
             'edit' => Pages\EditMediciones::route('/{record}/edit'),
         ];
     }
-    
+
     public static function canCreate(): bool
     {
         return false;

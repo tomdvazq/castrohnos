@@ -51,29 +51,30 @@ class ArchivosRelationManager extends RelationManager
                 Section::make('Archivos')
                     ->schema([
                         FileUpload::make('archivo')
-                        ->label('Archivo')
-                        ->helperText('Disponible para AutoCAD, PDF o Excel')
-                        ->enableOpen()
-                        ->enableDownload()
-                        ->preserveFilenames()
-                        ->panelLayout(null),
+                            ->label('Archivo')
+                            ->helperText('Disponible para AutoCAD, PDF o Excel')
+                            ->enableOpen()
+                            ->enableDownload()
+                            ->preserveFilenames()
+                            ->panelLayout(null),
                     ])
                     ->collapsed()
                     ->columnSpan('full'),
-                
+
                 Section::make('Dropbox')
                     ->schema([
                         TextInput::make('dropbox')
-                        ->label('Dropbox')
-                        ->helperText('Disponible para subir links de Dropbox')
-                        ->suffixAction(fn (?string $state): Action =>
-                            Action::make('Dropbox')
-                                ->icon('heroicon-s-external-link')
-                                ->url(
-                                    filled($state) ? "{$state}" : null,
-                                    shouldOpenInNewTab: true,
-                                ),
-                        )
+                            ->label('Dropbox')
+                            ->helperText('Disponible para subir links de Dropbox')
+                            ->suffixAction(
+                                fn (?string $state): Action =>
+                                Action::make('Dropbox')
+                                    ->icon('heroicon-s-external-link')
+                                    ->url(
+                                        filled($state) ? "{$state}" : null,
+                                        shouldOpenInNewTab: true,
+                                    ),
+                            )
                     ])
                     ->collapsed()
                     ->columnSpan('full')
@@ -93,7 +94,7 @@ class ArchivosRelationManager extends RelationManager
                         $dropbox = $record->dropbox;
                         $res = "";
 
-                        if($archivo === null) {
+                        if ($archivo === null) {
                             $res = $dropbox;
                         } else if ($dropbox === null) {
                             $res = $archivo;
@@ -115,5 +116,5 @@ class ArchivosRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }    
+    }
 }

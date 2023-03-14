@@ -29,7 +29,7 @@ class NuevoResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-plus-circle';
     protected static ?string $navigationLabel = 'Nuevo';
     protected static ?string $pluralModelLabel = 'Nuevo';
-    protected static ?string $modelLabel = 'pedido';
+    protected static ?string $modelLabel = 'cliente';
     protected static ?string $slug = 'nuevo';
     protected static ?int $navigationSort = 2;
 
@@ -62,9 +62,9 @@ class NuevoResource extends Resource
 
                                 return new HtmlString($label);
                             }),
-                            Section::make('🤔 ¿Hay que especificar algo de la dirección?')
-                                ->schema([
-                                    RichEditor::make('direccion_detalles')
+                        Section::make('🤔 ¿Hay que especificar algo de la dirección?')
+                            ->schema([
+                                RichEditor::make('direccion_detalles')
                                     ->label('')
                                     ->columnSpan('full')
                                     ->disableToolbarButtons([
@@ -77,8 +77,8 @@ class NuevoResource extends Resource
                                         'strike',
                                         'undo',
                                     ])
-                                ])
-                                ->collapsed(),
+                            ])
+                            ->collapsed(),
                     ])
                     ->columns(4),
                 Section::make('Información adicional')

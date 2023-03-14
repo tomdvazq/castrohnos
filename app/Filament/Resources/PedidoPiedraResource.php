@@ -40,46 +40,46 @@ class PedidoPiedraResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-        ->schema([
-            Fieldset::make('Este pedido de piedras')
-                ->schema([
-                    Select::make('cliente_id')
-                        ->label('Pertenece a')
-                        ->disabled()
-                        ->options(Cliente::all()->pluck('nombre', 'id')->toArray()),
+            ->schema([
+                Fieldset::make('Este pedido de piedras')
+                    ->schema([
+                        Select::make('cliente_id')
+                            ->label('Pertenece a')
+                            ->disabled()
+                            ->options(Cliente::all()->pluck('nombre', 'id')->toArray()),
 
-                    DatePicker::make('created_at')
-                        ->label('Fue ordenado el')
-                        ->timezone('America/Argentina/Buenos_Aires')
-                        ->displayFormat('d/m/Y')
-                        ->disabled(),
+                        DatePicker::make('created_at')
+                            ->label('Fue ordenado el')
+                            ->timezone('America/Argentina/Buenos_Aires')
+                            ->displayFormat('d/m/Y')
+                            ->disabled(),
 
-                    TextInput::make('identificacion')
-                        ->label('Identificación del pedido')
-                        ->columnSpanFull(),
-                ])
-                ->columnSpan(2),
-            Fieldset::make('Estado')
-                ->schema([
-                    Select::make('estado')
-                        ->label('Actualmente en')
-                        ->options([
-                            "Retira" => "🔵 Retira",
-                            "Avisa por la entrega" => "🟠 Avisa por la entrega",
-                            "Entregar" => "🟢 Entregar",
-                            "Reclama entrega de piedras" => "🔴 Reclama entrega de piedras"
-                        ])
-                        ->columnSpan('full'),
+                        TextInput::make('identificacion')
+                            ->label('Identificación del pedido')
+                            ->columnSpanFull(),
+                    ])
+                    ->columnSpan(2),
+                Fieldset::make('Estado')
+                    ->schema([
+                        Select::make('estado')
+                            ->label('Actualmente en')
+                            ->options([
+                                "Retira" => "🔵 Retira",
+                                "Avisa por la entrega" => "🟠 Avisa por la entrega",
+                                "Entregar" => "🟢 Entregar",
+                                "Reclama entrega de piedras" => "🔴 Reclama entrega de piedras"
+                            ])
+                            ->columnSpan('full'),
 
-                    DatePicker::make('entrega')
-                        ->label('A entregar el')
-                        ->timezone('America/Argentina/Buenos_Aires')
-                        ->displayFormat('d/m/Y')
-                        ->columnSpanFull()
-                ])
-                ->columnSpan(1),
-        ])
-        ->columns(3);
+                        DatePicker::make('entrega')
+                            ->label('A entregar el')
+                            ->timezone('America/Argentina/Buenos_Aires')
+                            ->displayFormat('d/m/Y')
+                            ->columnSpanFull()
+                    ])
+                    ->columnSpan(1),
+            ])
+            ->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -127,7 +127,7 @@ class PedidoPiedraResource extends Resource
                     ->searchable(),
                 TextColumn::make('identificacion'),
                 TextColumn::make('estado'),
-                TextColumn::make('seña') 
+                TextColumn::make('seña')
                     ->money('ars'),
             ])
             ->filters([
@@ -140,7 +140,7 @@ class PedidoPiedraResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
@@ -149,7 +149,7 @@ class PedidoPiedraResource extends Resource
             RelationManagers\ArchivosRelationManager::class,
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -157,7 +157,7 @@ class PedidoPiedraResource extends Resource
             'create' => Pages\CreatePedidoPiedra::route('/create'),
             'edit' => Pages\EditPedidoPiedra::route('/{record}/edit'),
         ];
-    }    
+    }
 
     public static function canCreate(): bool
     {

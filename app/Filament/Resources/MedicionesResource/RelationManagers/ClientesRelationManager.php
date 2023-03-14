@@ -29,25 +29,27 @@ class ClientesRelationManager extends RelationManager
                     ->required(),
                 TextInput::make('contacto')
                     ->required()
-                    ->suffixAction(fn (?string $state): Action =>
-                    Action::make('Whatsapp')
-                        ->icon('heroicon-s-phone')
-                        ->url(
-                            filled($state) ? "https://api.whatsapp.com/send?phone=549{$state}&text=¡Hola!%20nos%20comunicamos%20desde%20Castro%20Hermanos" : null,
-                            shouldOpenInNewTab: true,
-                        ),
-                ),
+                    ->suffixAction(
+                        fn (?string $state): Action =>
+                        Action::make('Whatsapp')
+                            ->icon('heroicon-s-phone')
+                            ->url(
+                                filled($state) ? "https://api.whatsapp.com/send?phone=549{$state}&text=¡Hola!%20nos%20comunicamos%20desde%20Castro%20Hermanos" : null,
+                                shouldOpenInNewTab: true,
+                            ),
+                    ),
                 TextInput::make('localidad'),
                 TextInput::make('direccion')
                     ->label('Dirección')
-                    ->suffixAction(fn (?string $state): Action =>
-                    Action::make('Maps')
-                        ->icon('heroicon-s-location-marker')
-                        ->url(
-                            filled($state) ? "https://www.google.com.ar/maps/place/{$state}" : null,
-                            shouldOpenInNewTab: true,
-                        ),
-                ),
+                    ->suffixAction(
+                        fn (?string $state): Action =>
+                        Action::make('Maps')
+                            ->icon('heroicon-s-location-marker')
+                            ->url(
+                                filled($state) ? "https://www.google.com.ar/maps/place/{$state}" : null,
+                                shouldOpenInNewTab: true,
+                            ),
+                    ),
                 TextInput::make('documento'),
                 TextInput::make('cuit_cuil')
                     ->label('CUIT/CUIL'),
@@ -84,5 +86,5 @@ class ClientesRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }    
+    }
 }

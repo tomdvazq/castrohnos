@@ -110,7 +110,8 @@ class PiedrasSelectionsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label('Agregar piedras al pedido'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

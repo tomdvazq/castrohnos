@@ -169,7 +169,7 @@ class RecotizacionResource extends Resource
                 //             ->afterStateHydrated(function ($set, $get){
                 //                 $id = Pedido::find($get('id'));
                 //                 $seña = $id?->seña;
-                                
+
                 //                 $set('total', $seña);
                 //             })
                 //             ->mask(fn (TextInput\Mask $mask) => $mask->money(prefix: '$ ', thousandsSeparator: ',', decimalPlaces: 2, isSigned: false)),
