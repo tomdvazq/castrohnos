@@ -182,11 +182,16 @@ class PedidosRelationManager extends RelationManager
                                 ->extraAttributes(['style' => 'display: none'])
                                 ->saveRelationshipsUsing(function ($get, $record) {
 
-                                    $lastSelectionId = MaterialesSelection::all()->last()->id;
-                                    $newSelectionId = $lastSelectionId + 1;
+                                    $id = "";
+
+                                    if (empty(MaterialesSelection::all()->last()->id)) {
+                                        $id = 1;
+                                    } else {
+                                        $id = MaterialesSelection::all()->last()->id + 1;
+                                    }
 
                                     $result = DB::table('materiales_selections')->insert([
-                                        'id' => $newSelectionId,
+                                        'id' => $id,
                                         'pedido_id' => $record->id,
                                         'material_id' => $get('material_id'),
                                         'material_listado_id' => $get('material_listado_id'),
@@ -276,14 +281,20 @@ class PedidosRelationManager extends RelationManager
                                 ->extraAttributes(['style' => 'display: none'])
                                 ->saveRelationshipsUsing(function ($get, $record) {
 
-                                    $lastSelectionId = BachasSelection::all()->last()->id;
-                                    $newSelectionId = $lastSelectionId + 1;
+                                    $id = "";
+
+                                    if (empty(BachasSelection::all()->last()->id)) {
+                                        $id = 1;
+                                    } else {
+                                        $id = BachasSelection::all()->last()->id + 1;
+                                    }
 
                                     $result = DB::table('bachas_selections')->insert([
-                                        'id' => $newSelectionId,
+                                        'id' => $id,
                                         'pedido_id' => $record->id,
                                         'bacha_id' => $get('bacha_id'),
                                         'bacha_listado_id' => $get('bacha_listado_id'),
+                                        'tipo_bacha' => $get('tipo_bacha'),
                                         'cantidad' => $get('cantidad'),
                                         'material' => $get('material'),
                                     ]);
@@ -350,7 +361,7 @@ class PedidosRelationManager extends RelationManager
                                         ->suffix('U'),
 
                                     TextInput::make('stock')
-                                        ->label('Stock de la bacha')
+                                        ->label('Stock del accesorio')
                                         ->numeric()
                                         ->suffix('U'),
                                 ]),
@@ -362,11 +373,16 @@ class PedidosRelationManager extends RelationManager
                                 ->extraAttributes(['style' => 'display: none'])
                                 ->saveRelationshipsUsing(function ($get, $record) {
 
-                                    $lastSelectionId = AccesoriosSelection::all()->last()->id;
-                                    $newSelectionId = $lastSelectionId + 1;
+                                    $id = "";
+
+                                    if (empty(AccesoriosSelection::all()->last()->id)) {
+                                        $id = 1;
+                                    } else {
+                                        $id = AccesoriosSelection::all()->last()->id + 1;
+                                    }
 
                                     $result = DB::table('accesorios_selections')->insert([
-                                        'id' => $newSelectionId,
+                                        'id' => $id,
                                         'pedido_id' => $record->id,
                                         'accesorio_id' => $get('accesorio_id'),
                                         'accesorio_listado_id' => $get('accesorio_listado_id'),
@@ -404,7 +420,7 @@ class PedidosRelationManager extends RelationManager
                         }
                     })
                     ->tooltip('Ver toda la información de esta mesada')
-                    ->label('Ver toda la información de esta mesada'),
+                    ->label('Ir a la mesada'),
                 ActionGroup::make([
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),

@@ -32,7 +32,7 @@ class PedidoResource extends Resource
     protected static ?string $model = Pedido::class;
 
     protected static ?string $navigationGroup = 'Pedidos';
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-list';
     protected static ?int $navigationSort = 1;
 
 

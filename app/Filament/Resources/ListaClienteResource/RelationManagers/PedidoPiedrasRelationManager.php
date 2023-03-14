@@ -35,28 +35,28 @@ class PedidoPiedrasRelationManager extends RelationManager
     public static function form(Form $form): Form
     {
         return $form
-        ->schema([
-            TextInput::make('identificacion')
-                ->required()
-                ->maxLength(255),
-            DatePicker::make('created_at')
-                ->label('Pedido de piedras realizado el')
-                ->timezone('America/Argentina/Buenos_Aires')
-                ->displayFormat('d/m/Y')
-                ->disabled()
-                ->default(Carbon::now()),
-            Select::make('estado')
-                ->options([
-                    "Retira" => "🔵 Retira",
-                    "Avisa por la entrega" => "🟠 Avisa por la entrega",
-                    "Entregar" => "🟢 Entregar",
-                    "Reclama entrega de piedras" => "🔴 Reclama entrega de piedras"
-                ]),
-            DatePicker::make('entrega')
-                ->label('Piedras a entregar el')
-                ->timezone('America/Argentina/Buenos_Aires')
-                ->displayFormat('d/m/Y')
-        ]);
+            ->schema([
+                TextInput::make('identificacion')
+                    ->required()
+                    ->maxLength(255),
+                DatePicker::make('created_at')
+                    ->label('Pedido de piedras realizado el')
+                    ->timezone('America/Argentina/Buenos_Aires')
+                    ->displayFormat('d/m/Y')
+                    ->disabled()
+                    ->default(Carbon::now()),
+                Select::make('estado')
+                    ->options([
+                        "Retira" => "🔵 Retira",
+                        "Avisa por la entrega" => "🟠 Avisa por la entrega",
+                        "Entregar" => "🟢 Entregar",
+                        "Reclama entrega de piedras" => "🔴 Reclama entrega de piedras"
+                    ]),
+                DatePicker::make('entrega')
+                    ->label('Piedras a entregar el')
+                    ->timezone('America/Argentina/Buenos_Aires')
+                    ->displayFormat('d/m/Y')
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -78,104 +78,109 @@ class PedidoPiedrasRelationManager extends RelationManager
             ->actions([
                 ActionGroup::make([
                     Action::make('agregarPiedra')
-                    ->label('Agregar piedra')
+                        ->label('Agregar piedra')
+                        ->icon('heroicon-o-plus-circle')
+                        ->color('success')
+                        ->action(function (PedidoPiedra $record, array $data): void {
+                            $record->id;
+                        })
+                        ->form([
+                            Fieldset::make('Selección de piedra')
+                                ->schema([
+                                    Select::make('material_id')
+                                        ->options(Material::all()->pluck('tipo', 'id')->toArray())
+                                        ->label('Tipo de piedra')
+                                        ->afterStateUpdated(fn (callable $set, $get) => $set('material_listado_id', null))
+                                        ->reactive(),
+
+                                    Select::make('material_listado_id')
+                                        ->label('Piedra')
+                                        ->options(function (callable $get) {
+                                            $material = Material::find($get('material_id'));
+
+                                            if (!$material) {
+                                                return MaterialListado::all()->pluck('material', 'id');
+                                            }
+
+                                            $value = $material->materialesStock->pluck('material', 'id');
+
+                                            return $value;
+                                        })
+                                        ->afterStateUpdated(function ($set, $get) {
+                                            $id = MaterialListado::find($get('material_listado_id'));
+                                            $material = $id?->material;
+                                            $stock = $id->stock;
+
+                                            $set('material', $material);
+                                            $set('stock', $stock);
+                                        })
+                                        ->reactive()
+                                        ->searchable(),
+                                ]),
+
+                            Fieldset::make('Cantidad y stock')
+                                ->schema([
+                                    TextInput::make('cantidad')
+                                        ->label('Cantidad')
+                                        ->saveRelationshipsUsing(function ($set, $get) {
+                                            $material = MaterialListado::find($get('material_listado_id'));
+                                            $m2 = $get('cantidad');
+                                            $stock = $material->stock;
+
+                                            $material->stock = intval($stock) - intval($m2);
+
+                                            $material->save();
+                                        })
+                                        ->numeric()
+                                        ->suffix('m²'),
+
+                                    TextInput::make('stock')
+                                        ->label('Stock de la piedra')
+                                        ->numeric()
+                                        ->suffix('m²'),
+                                ]),
+
+                            TextInput::make('material')
+                                ->label('')
+                                ->lazy()
+                                ->columnSpan('full')
+                                ->extraAttributes(['style' => 'display: none'])
+                                ->saveRelationshipsUsing(function ($get, $record) {
+
+                                    $id = "";
+
+                                    if (empty(PiedrasSelection::all()->last()->id)) {
+                                        $id = 1;
+                                    } else {
+                                        $id = PiedrasSelection::all()->last()->id + 1;
+                                    }
+
+                                    $result = DB::table('piedras_selections')->insert([
+                                        'id' => $id,
+                                        'pedido_id' => $record->id,
+                                        'material_id' => $get('material_id'),
+                                        'material_listado_id' => $get('material_listado_id'),
+                                        'cantidad' => $get('cantidad'),
+                                        'material' => $get('material'),
+                                    ]);
+
+                                    return $result;
+                                })
+                        ]),
+                ])
                     ->icon('heroicon-o-plus-circle')
                     ->color('success')
-                    ->action(function (PedidoPiedra $record, array $data): void {
-                        $record->id;
-                    })
-                    ->form([
-                        Fieldset::make('Selección de piedra')
-                            ->schema([
-                                Select::make('material_id')
-                                    ->options(Material::all()->pluck('tipo', 'id')->toArray())
-                                    ->label('Tipo de piedra')
-                                    ->afterStateUpdated(fn (callable $set, $get) => $set('material_listado_id', null))
-                                    ->reactive(),
-
-                                Select::make('material_listado_id')
-                                    ->label('Piedra')
-                                    ->options(function (callable $get) {
-                                        $material = Material::find($get('material_id'));
-
-                                        if (!$material) {
-                                            return MaterialListado::all()->pluck('material', 'id');
-                                        }
-
-                                        $value = $material->materialesStock->pluck('material', 'id');
-
-                                        return $value;
-                                    })
-                                    ->afterStateUpdated(function ($set, $get) {
-                                        $id = MaterialListado::find($get('material_listado_id'));
-                                        $material = $id?->material;
-                                        $stock = $id->stock;
-
-                                        $set('material', $material);
-                                        $set('stock', $stock);
-                                    })
-                                    ->reactive()
-                                    ->searchable(),
-                            ]),
-
-                        Fieldset::make('Cantidad y stock')
-                            ->schema([
-                                TextInput::make('cantidad')
-                                    ->label('Cantidad')
-                                    ->saveRelationshipsUsing(function ($set, $get) {
-                                        $material = MaterialListado::find($get('material_listado_id'));
-                                        $m2 = $get('cantidad');
-                                        $stock = $material->stock;
-
-                                        $material->stock = intval($stock) - intval($m2);
-
-                                        $material->save();
-                                    })
-                                    ->numeric()
-                                    ->suffix('m²'),
-
-                                TextInput::make('stock')
-                                    ->label('Stock de la piedra')
-                                    ->numeric()
-                                    ->suffix('m²'),
-                            ]),
-
-                        TextInput::make('material')
-                            ->label('')
-                            ->lazy()
-                            ->columnSpan('full')
-                            ->extraAttributes(['style' => 'display: none'])
-                            ->saveRelationshipsUsing(function ($get, $record) {
-
-                                $lastSelectionId = PiedrasSelection::all()->last()->id;
-                                $newSelectionId = $lastSelectionId + 1;
-
-                                $result = DB::table('piedras_selections')->insert([
-                                    'id' => $newSelectionId,
-                                    'pedido_id' => $record->id,
-                                    'material_id' => $get('material_id'),
-                                    'material_listado_id' => $get('material_listado_id'),
-                                    'cantidad' => $get('cantidad'),
-                                    'material' => $get('material'),
-                                ]);
-
-                                return $result;
-                            })
-                    ]),
-                ])
-                ->icon('heroicon-o-plus-circle')
-                ->color('success')
-                ->label('Agregar piedra a este pedido')
-                ->tooltip('Agregar piedra a este pedido'),
+                    ->label('Agregar piedra a este pedido')
+                    ->tooltip('Agregar piedra a este pedido'),
                 Action::make('verPedido')
                     ->label('Ir al pedido')
                     ->url(function ($record) {
                         $id = $record->id;
 
-                        return '/admin/piedras/'.$id.'/edit?activeRelationManager=0';
+                        return '/admin/piedras/' . $id . '/edit?activeRelationManager=0';
                     })
                     ->tooltip('Ver toda la información de este pedido')
-                    ->label('Ver toda la información de este pedido'),
+                    ->label('Ir al pedido'),
                 ActionGroup::make([
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
@@ -184,5 +189,5 @@ class PedidoPiedrasRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }    
+    }
 }

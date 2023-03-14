@@ -19,7 +19,7 @@ return new class extends Migration
                 ->nullable();
             $table->string('direccion')
                 ->nullable();
-            $table->string('entracalle_1')
+            $table->string('entrecalle_1')
                 ->nullable();
             $table->string('entrecalle_2')
                 ->nullable();

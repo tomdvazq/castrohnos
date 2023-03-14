@@ -20,7 +20,7 @@ class ListaClienteResource extends Resource
 {
     protected static ?string $model = ListaCliente::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     protected static ?string $navigationLabel = 'Clientes';
     protected static ?string $pluralModelLabel = 'Clientes';
@@ -57,16 +57,23 @@ class ListaClienteResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nombre'),
+                TextColumn::make('nombre')
+                    ->searchable(),
                 TextColumn::make('direccion')
-                    ->label('Dirección'),
-                TextColumn::make('localidad'),
-                TextColumn::make('contacto'),
-                TextColumn::make('documento'),
+                    ->label('Dirección')
+                    ->searchable(),
+                TextColumn::make('localidad')
+                    ->searchable(),
+                TextColumn::make('contacto')
+                    ->searchable(),
+                TextColumn::make('documento')
+                    ->searchable(),
                 TextColumn::make('cuit_cuil')
-                    ->label('CUIT/CUIL'),
+                    ->label('CUIT/CUIL')
+                    ->searchable(),
                 TextColumn::make('razon_social')
-                    ->label('Razón Social'),
+                    ->label('Razón Social')
+                    ->searchable(),
             ])
             ->filters([
                 //

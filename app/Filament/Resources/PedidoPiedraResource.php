@@ -29,7 +29,7 @@ class PedidoPiedraResource extends Resource
     protected static ?string $model = PedidoPiedra::class;
 
     protected static ?string $navigationGroup = 'Piedras';
-    protected static ?string $navigationIcon = 'heroicon-o-plus-circle';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-list';
     protected static ?string $navigationLabel = 'Piedras';
     protected static ?string $pluralModelLabel = 'Piedras';
     protected static ?string $modelLabel = 'piedra';
@@ -127,8 +127,6 @@ class PedidoPiedraResource extends Resource
                     ->searchable(),
                 TextColumn::make('identificacion'),
                 TextColumn::make('estado'),
-                TextColumn::make('seña')
-                    ->money('ars'),
             ])
             ->filters([
                 //

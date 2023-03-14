@@ -149,11 +149,16 @@ class PedidoPiedrasRelationManager extends RelationManager
                                 ->extraAttributes(['style' => 'display: none'])
                                 ->saveRelationshipsUsing(function ($get, $record) {
 
-                                    $lastSelectionId = PiedrasSelection::all()->last()->id;
-                                    $newSelectionId = $lastSelectionId + 1;
+                                    $id = "";
+
+                                    if (empty(PiedrasSelection::all()->last()->id)) {
+                                        $id = 1;
+                                    } else {
+                                        $id = PiedrasSelection::all()->last()->id + 1;
+                                    }
 
                                     $result = DB::table('piedras_selections')->insert([
-                                        'id' => $newSelectionId,
+                                        'id' => $id,
                                         'pedido_id' => $record->id,
                                         'material_id' => $get('material_id'),
                                         'material_listado_id' => $get('material_listado_id'),
@@ -177,7 +182,7 @@ class PedidoPiedrasRelationManager extends RelationManager
                         return '/admin/piedras/' . $id . '/edit?activeRelationManager=0';
                     })
                     ->tooltip('Ver toda la información de este pedido')
-                    ->label('Ver toda la información de este pedido'),
+                    ->label('Ir al pedido'),
                 ActionGroup::make([
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
