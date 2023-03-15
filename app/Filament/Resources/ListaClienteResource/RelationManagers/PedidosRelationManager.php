@@ -23,6 +23,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\DatePicker;
@@ -210,7 +211,7 @@ class PedidosRelationManager extends RelationManager
                             $record->id;
                         })
                         ->form([
-                            Fieldset::make('Selección de material')
+                            Fieldset::make('Selección de bacha')
                                 ->schema([
                                     Select::make('tipo_bacha')
                                         ->label('Tipo de bacha')

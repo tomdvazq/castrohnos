@@ -12,6 +12,7 @@ use Filament\Resources\Table;
 use App\Models\MaterialListado;
 use App\Models\MaterialesSelection;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
@@ -32,49 +33,66 @@ class MaterialesSelectionsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Select::make('material_id')
-                    ->options(Material::all()->pluck('tipo', 'id')->toArray())
-                    ->label('Tipo de material')
-                    ->afterStateUpdated(fn (callable $set) => $set('material_listado_id', null))
-                    ->reactive(),
+                Fieldset::make('Selección de material')
+                ->schema([
+                    Select::make('material_id')
+                        ->options(Material::all()->pluck('tipo', 'id')->toArray())
+                        ->label('Tipo de material')
+                        ->afterStateUpdated(fn (callable $set, $get) => $set('material_listado_id', null))
+                        ->reactive(),
 
-                Select::make('material_listado_id')
-                    ->label('Material')
-                    ->options(function (callable $get) {
-                        $material = Material::find($get('material_id'));
+                    Select::make('material_listado_id')
+                        ->label('Material')
+                        ->options(function (callable $get) {
+                            $material = Material::find($get('material_id'));
 
-                        if (!$material) {
-                            return MaterialListado::all()->pluck('material', 'id');
-                        }
+                            if (!$material) {
+                                return MaterialListado::all()->pluck('material', 'id');
+                            }
 
-                        $value = $material->materialesStock->pluck('material', 'id');
+                            $value = $material->materialesStock->pluck('material', 'id');
 
-                        return $value;
-                    })
-                    ->afterStateUpdated(function ($set, $get) {
-                        $id = MaterialListado::find($get('material_listado_id'));
-                        $material = $id?->material;
+                            return $value;
+                        })
+                        ->afterStateUpdated(function ($set, $get) {
+                            $id = MaterialListado::find($get('material_listado_id'));
+                            $material = $id?->material;
+                            $stock = $id->stock;
 
-                        $set('material', $material);
-                    })
-                    ->searchable(),
+                            $set('material', $material);
+                            $set('stock', $stock);
+                        })
+                        ->reactive()
+                        ->searchable(),
+                ]),
 
-                TextInput::make('cantidad')
-                    ->label('Cantidad')
-                    ->afterStateUpdated(function ($set, $get) {
-                        $material = MaterialListado::find($get('material_listado_id'));
-                        $stock = $material?->stock ?? 0;
-                        $m2 = $get('cantidad');
+            Fieldset::make('Cantidad y stock')
+                ->schema([
+                    TextInput::make('cantidad')
+                        ->label('Cantidad')
+                        ->saveRelationshipsUsing(function ($set, $get) {
+                            $material = MaterialListado::find($get('material_listado_id'));
+                            $m2 = $get('cantidad');
+                            $stock = $material->stock;
 
-                        $set($stock, intval($stock) - intval($m2));
-                    })
-                    ->numeric()
-                    ->suffix('m²'),
+                            $material->stock = intval($stock) - intval($m2);
 
-                TextInput::make('material')
-                    ->label('Renderización de materiales')
-                    ->lazy()
-                    ->columnSpan('full')
+                            $material->save();
+                        })
+                        ->numeric()
+                        ->suffix('m²'),
+
+                    TextInput::make('stock')
+                        ->label('Stock del material')
+                        ->numeric()
+                        ->suffix('m²'),
+                ]),
+
+            TextInput::make('material')
+                ->label('')
+                ->lazy()
+                ->columnSpan('full')
+                ->extraAttributes(['style' => 'display: none'])
             ])
             ->columns(3);
     }
