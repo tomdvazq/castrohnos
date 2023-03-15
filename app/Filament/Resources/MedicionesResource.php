@@ -24,6 +24,7 @@ use App\Filament\Resources\MedicionesResource\Pages;
 use Awcodes\FilamentBadgeableColumn\Components\Badge;
 use App\Filament\Resources\MedicionesResource\RelationManagers;
 use Awcodes\FilamentBadgeableColumn\Components\BadgeableColumn;
+use Filament\Resources\RelationManagers\RelationManager;
 
 class MedicionesResource extends Resource
 {
@@ -275,6 +276,8 @@ class MedicionesResource extends Resource
     {
         return [
             RelationManagers\MaterialesSelectionsRelationManager::class,
+            RelationManagers\BachasSelectionsRelationManager::class,
+            RelationManagers\AccesoriosSelectionsRelationManager::class,
             RelationManagers\ClientesRelationManager::class,
             RelationManagers\ArchivosRelationManager::class,
         ];

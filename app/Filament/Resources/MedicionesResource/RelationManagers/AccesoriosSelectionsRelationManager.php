@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\RecotizacionResource\RelationManagers;
+namespace App\Filament\Resources\MedicionesResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
@@ -13,13 +13,9 @@ use App\Models\AccesoriosSelection;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Fieldset;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
 
@@ -36,7 +32,7 @@ class AccesoriosSelectionsRelationManager extends RelationManager
     {
         return $form
         ->schema([
-            Fieldset::make('Selección de bacha')
+            Fieldset::make('Selección de Accesorios')
                 ->schema([
                     Select::make('accesorio_id')
                         ->options(Accesorios::all()->pluck('marca', 'id')->toArray())
@@ -86,7 +82,7 @@ class AccesoriosSelectionsRelationManager extends RelationManager
                         ->suffix('U'),
 
                     TextInput::make('stock')
-                        ->label('Stock de esta bacha')
+                        ->label('Stock de esta Accesorios')
                         ->numeric()
                         ->suffix('U'),
                 ]),

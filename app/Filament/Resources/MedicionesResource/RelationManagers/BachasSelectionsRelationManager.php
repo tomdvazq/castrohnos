@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\RecotizacionResource\RelationManagers;
+namespace App\Filament\Resources\MedicionesResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
@@ -309,7 +309,7 @@ class BachasSelectionsRelationManager extends RelationManager
                 Tables\Actions\DeleteAction::make()
                     ->action(function ($record) {
                         //Sumar y guardar el stock con la cantidad de material eliminado
-                        $seleccion = $record->bacha_id;
+                        $seleccion = $record->material_id;
                         $cantidad = $record->cantidad;
                         $material = BachaListado::find($seleccion);
                         $material->stock = intval($material->stock) + $cantidad;
