@@ -23,7 +23,7 @@ class MaterialesSelectionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'materiales_selections';
 
-    protected static ?string $recordTitleAttribute = 'pedido_id';
+    protected static ?string $recordTitleAttribute = 'material';
 
     protected static ?string $pluralModelLabel = 'Materiales';
     protected static ?string $modelLabel = 'material';

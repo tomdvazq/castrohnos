@@ -26,7 +26,7 @@ class BachasSelectionsRelationManager extends RelationManager
     protected static ?string $pluralModelLabel = 'Bachas';
     protected static ?string $modelLabel = 'bacha';
 
-    protected static ?string $recordTitleAttribute = 'pedido_id';
+    protected static ?string $recordTitleAttribute = 'material';
 
     public static function form(Form $form): Form
     {

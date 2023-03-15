@@ -24,7 +24,7 @@ class MaterialesSelectionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'materiales_selections';
 
-    protected static ?string $recordTitleAttribute = 'pedido_id';
+    protected static ?string $recordTitleAttribute = 'material';
 
     protected static ?string $pluralModelLabel = 'Materiales';
     protected static ?string $modelLabel = 'material';
@@ -188,12 +188,12 @@ class MaterialesSelectionsRelationManager extends RelationManager
 
                         Section::make(function ($record) {
 
-                                $estadoStock = "";
+                            $estadoStock = "";
 
-                                $res = '👌 Esta mesada utiliza ' . $record->cantidad . 'm² del material.' . '<br> <span style="font-size: 16px; font-weight: 100;">El stock actualizado de <span style="color: #5A5100; font-weight: 500">' . $record->material . '</span> es de <span style="font-weight: 500">' . MaterialListado::find($record->material_listado_id)->stock . 'm²</span> ' . $estadoStock . '</span>';
-    
-                                return new HtmlString($res);
-                            })
+                            $res = '👌 Esta mesada utiliza ' . $record->cantidad . 'm² del material.' . '<br> <span style="font-size: 16px; font-weight: 100;">El stock actualizado de <span style="color: #5A5100; font-weight: 500">' . $record->material . '</span> es de <span style="font-weight: 500">' . MaterialListado::find($record->material_listado_id)->stock . 'm²</span> ' . $estadoStock . '</span>';
+
+                            return new HtmlString($res);
+                        })
                             ->schema([
                                 TextInput::make('cantidad')
                                     ->label('Cantidad')
@@ -215,64 +215,64 @@ class MaterialesSelectionsRelationManager extends RelationManager
                             ->collapsed()
                             ->columns(2),
 
-                        Section::make(function($record) {
-                            $res = '<span style="font-size: 18px">Agregar o restar m² de '. $record->material . ' en el pedido ' . $record->pedidos->identificacion . '</span>';
+                        Section::make(function ($record) {
+                            $res = '<span style="font-size: 18px">Agregar o restar m² de ' . $record->material . ' en el pedido ' . $record->pedidos->identificacion . '</span>';
 
                             return new HtmlString($res);
                         })
                             ->description('Tenga en cuenta que está manipulando el stock')
                             ->schema([
-                                    TextInput::make('quantity')
-                                        ->label(function ($record) {
-                                            $res = "<span style='color: #20BF42;'>(+) </span> Agregar m²";
+                                TextInput::make('quantity')
+                                    ->label(function ($record) {
+                                        $res = "<span style='color: #20BF42;'>(+) </span> Agregar m²";
 
-                                            return new HtmlString($res);
-                                        })
-                                        ->numeric()
-                                        ->suffix('m²')
-                                        ->saveRelationshipsUsing(function ($get, $record) {
-                                            // Actualizar stock
-                                            $material = MaterialListado::find($get('material_listado_id'));
-                                            $m2 = $get('quantity');
-                                            $stock = $material->stock;
-    
-                                            $material->stock = intval($stock) - intval($m2);
+                                        return new HtmlString($res);
+                                    })
+                                    ->numeric()
+                                    ->suffix('m²')
+                                    ->saveRelationshipsUsing(function ($get, $record) {
+                                        // Actualizar stock
+                                        $material = MaterialListado::find($get('material_listado_id'));
+                                        $m2 = $get('quantity');
+                                        $stock = $material->stock;
 
-                                            $material->save();
-                                            // Sumar m² al pedido
-                                            $seleccion = MaterialesSelection::find($get('id'));
-                                            $actual = $seleccion->cantidad;
+                                        $material->stock = intval($stock) - intval($m2);
 
-                                            $seleccion->cantidad = intval($actual) + intval($m2);
+                                        $material->save();
+                                        // Sumar m² al pedido
+                                        $seleccion = MaterialesSelection::find($get('id'));
+                                        $actual = $seleccion->cantidad;
 
-                                            $seleccion->save();
-                                        }),
+                                        $seleccion->cantidad = intval($actual) + intval($m2);
 
-                                    TextInput::make('quantityRes')
-                                        ->label(function ($record) {
-                                            $res = "<span style='color: red;'>(-) </span> Restar m²";
+                                        $seleccion->save();
+                                    }),
 
-                                            return new HtmlString($res);
-                                        })
-                                        ->numeric()
-                                        ->suffix('m²')
-                                        ->saveRelationshipsUsing(function ($get, $record) {
-                                            // Actualizar stock
-                                            $material = MaterialListado::find($get('material_listado_id'));
-                                            $m2 = $get('quantityRes');
-                                            $stock = $material->stock;
+                                TextInput::make('quantityRes')
+                                    ->label(function ($record) {
+                                        $res = "<span style='color: red;'>(-) </span> Restar m²";
 
-                                            $material->stock = intval($stock) + intval($m2);
+                                        return new HtmlString($res);
+                                    })
+                                    ->numeric()
+                                    ->suffix('m²')
+                                    ->saveRelationshipsUsing(function ($get, $record) {
+                                        // Actualizar stock
+                                        $material = MaterialListado::find($get('material_listado_id'));
+                                        $m2 = $get('quantityRes');
+                                        $stock = $material->stock;
 
-                                            $material->save();
-                                            // Sumar m² al pedido
-                                            $seleccion = MaterialesSelection::find($get('id'));
-                                            $actual = $seleccion->cantidad;
+                                        $material->stock = intval($stock) + intval($m2);
 
-                                            $seleccion->cantidad = intval($actual) - intval($m2);
+                                        $material->save();
+                                        // Sumar m² al pedido
+                                        $seleccion = MaterialesSelection::find($get('id'));
+                                        $actual = $seleccion->cantidad;
 
-                                            $seleccion->save();
-                                        })
+                                        $seleccion->cantidad = intval($actual) - intval($m2);
+
+                                        $seleccion->save();
+                                    })
                             ])
                             ->columns(2)
                     ]),

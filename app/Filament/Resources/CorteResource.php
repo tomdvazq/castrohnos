@@ -232,8 +232,10 @@ class CorteResource extends Resource
     {
         return [
             RelationManagers\MaterialesSelectionsRelationManager::class,
-            RelationManagers\ClientesRelationManager::class,
+            RelationManagers\BachasSelectionsRelationManager::class,
+            RelationManagers\AccesoriosSelectionsRelationManager::class,
             RelationManagers\ArchivosRelationManager::class,
+            RelationManagers\ClientesRelationManager::class,
         ];
     }
 

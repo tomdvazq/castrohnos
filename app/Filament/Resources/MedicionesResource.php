@@ -278,8 +278,8 @@ class MedicionesResource extends Resource
             RelationManagers\MaterialesSelectionsRelationManager::class,
             RelationManagers\BachasSelectionsRelationManager::class,
             RelationManagers\AccesoriosSelectionsRelationManager::class,
-            RelationManagers\ClientesRelationManager::class,
             RelationManagers\ArchivosRelationManager::class,
+            RelationManagers\ClientesRelationManager::class,
         ];
     }
 

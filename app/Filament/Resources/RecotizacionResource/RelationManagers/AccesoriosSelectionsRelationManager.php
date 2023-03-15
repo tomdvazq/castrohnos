@@ -30,7 +30,7 @@ class AccesoriosSelectionsRelationManager extends RelationManager
     protected static ?string $pluralModelLabel = 'Accesorios';
     protected static ?string $modelLabel = 'accesorio';
 
-    protected static ?string $recordTitleAttribute = 'pedido_id';
+    protected static ?string $recordTitleAttribute = 'material';
 
     public static function form(Form $form): Form
     {

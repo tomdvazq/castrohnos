@@ -38,54 +38,54 @@ class Mediciones extends Model
         return $this->hasMany(Archivo::class, 'pedido_id');
     }
 
-        // Relación con base de datos de materiales
+    // Relación con base de datos de materiales
 
-        public function materials()
-        {
-            return $this->hasMany(Material::class);
-        }
-    
-        public function materialesStock()
-        {
-            return $this->belongsTo(MaterialListado::class, 'material');
-        }
-    
-        public function materiales_selections()
-        {
-            return $this->hasMany(MaterialesSelection::class, 'pedido_id');
-        }
-    
-        // Relación con base de datos de bachas
-    
-        public function bachas()
-        {
-            return $this->hasMany(Bachas::class);
-        }
-    
-        public function bachasStock()
-        {
-            return $this->hasMany(BachaListado::class, 'id');
-        }
-    
-        public function bachas_selections()
-        {
-            return $this->hasMany(BachasSelection::class, 'pedido_id');
-        }
-    
-        // Relacion con base de datos de bachas
-    
-        public function accesorios()
-        {
-            return $this->hasMany(Accesorios::class);
-        }
-    
-        public function accesorios_selections()
-        {
-            return $this->hasMany(AccesoriosSelection::class, 'pedido_id');
-        }
-    
-        public function accesoriosStock()
-        {
-            return $this->belongsTo(AccesorioListado::class, 'tipo');
-        }
+    public function materials()
+    {
+        return $this->hasMany(Material::class);
+    }
+
+    public function materialesStock()
+    {
+        return $this->belongsTo(MaterialListado::class, 'material');
+    }
+
+    public function materiales_selections()
+    {
+        return $this->hasMany(MaterialesSelection::class, 'pedido_id');
+    }
+
+    // Relación con base de datos de bachas
+
+    public function bachas()
+    {
+        return $this->hasMany(Bachas::class);
+    }
+
+    public function bachasStock()
+    {
+        return $this->hasMany(BachaListado::class, 'id');
+    }
+
+    public function bachas_selections()
+    {
+        return $this->hasMany(BachasSelection::class, 'pedido_id');
+    }
+
+    // Relacion con base de datos de bachas
+
+    public function accesorios()
+    {
+        return $this->hasMany(Accesorios::class);
+    }
+
+    public function accesorios_selections()
+    {
+        return $this->hasMany(AccesoriosSelection::class, 'pedido_id');
+    }
+
+    public function accesoriosStock()
+    {
+        return $this->belongsTo(AccesorioListado::class, 'tipo');
+    }
 }

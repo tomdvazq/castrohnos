@@ -3,34 +3,144 @@
 namespace App\Filament\Resources\CorteResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
 use Filament\Tables;
+use App\Models\Material;
+use Filament\Resources\Form;
+use Filament\Resources\Table;
+use App\Models\MaterialListado;
+use Illuminate\Support\HtmlString;
+use App\Models\MaterialesSelection;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Fieldset;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\RelationManagers\RelationManager;
 
 class MaterialesSelectionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'materiales_selections';
 
-    protected static ?string $recordTitleAttribute = 'pedido_id';
+    protected static ?string $recordTitleAttribute = 'material';
+
+    protected static ?string $pluralModelLabel = 'Materiales';
+    protected static ?string $modelLabel = 'material';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('pedido_id')
-                    ->required()
-                    ->maxLength(255),
-            ]);
+                Fieldset::make('Selección de material')
+                    ->schema([
+                        Select::make('material_id')
+                            ->options(Material::all()->pluck('tipo', 'id')->toArray())
+                            ->label('Tipo de material')
+                            ->afterStateUpdated(fn (callable $set, $get) => $set('material_listado_id', null))
+                            ->reactive(),
+
+                        Select::make('material_listado_id')
+                            ->label('Material')
+                            ->options(function (callable $get) {
+                                $material = Material::find($get('material_id'));
+
+                                if (!$material) {
+                                    return MaterialListado::all()->pluck('material', 'id');
+                                }
+
+                                $value = $material->materialesStock->pluck('material', 'id');
+
+                                return $value;
+                            })
+                            ->afterStateUpdated(function ($set, $get) {
+                                $id = MaterialListado::find($get('material_listado_id'));
+                                $material = $id?->material;
+                                $stock = $id->stock;
+
+                                $set('material', $material);
+                                $set('stock', $stock);
+                            })
+                            ->reactive()
+                            ->searchable(),
+                    ]),
+
+                Fieldset::make('Cantidad y stock')
+                    ->schema([
+                        TextInput::make('cantidad')
+                            ->label('Cantidad')
+                            ->saveRelationshipsUsing(function ($set, $get) {
+                                $material = MaterialListado::find($get('material_listado_id'));
+                                $m2 = $get('cantidad');
+                                $stock = $material->stock;
+
+                                $material->stock = intval($stock) - intval($m2);
+
+                                $material->save();
+                            })
+                            ->numeric()
+                            ->suffix('m²'),
+
+                        TextInput::make('stock')
+                            ->label('Stock del material')
+                            ->numeric()
+                            ->suffix('m²'),
+                    ]),
+
+                TextInput::make('material')
+                    ->label('')
+                    ->lazy()
+                    ->columnSpan('full')
+                    ->extraAttributes(['style' => 'display: none'])
+            ])
+            ->columns(3);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('pedido_id'),
+                TextColumn::make('material_id')
+                    ->label('Tipo de material')
+                    ->getStateUsing(function ($record) {
+                        $id = $record->material_id;
+                        $material_id = collect(Material::find($id, 'tipo'));
+                        $resultado = "";
+
+                        foreach ($material_id as $key => $value) {
+                            if ($value) {
+                                $resultado .= $value;
+                            }
+                        }
+
+                        return $resultado;
+                    }),
+
+                TextColumn::make('material_listado_id')
+                    ->label('Material')
+                    ->getStateUsing(function ($record) {
+                        $id = $record->material_listado_id;
+                        $material_listado_id = collect(MaterialListado::find($id, 'material'));
+                        $resultado = "";
+
+                        foreach ($material_listado_id as $key => $value) {
+                            if ($value) {
+                                $resultado .= $value;
+                            }
+                        }
+
+                        return $resultado;
+                    }),
+
+                TextColumn::make('cantidad')
+                    ->label('Cantidad en m²')
+                    ->formatStateUsing(function ($record) {
+                        return $record->cantidad . ' m²';
+                    })
             ])
             ->filters([
                 //
@@ -39,11 +149,155 @@ class MaterialesSelectionsRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->form([
+                        Section::make(function ($record) {
+                            $res = '🎯 ' . $record->material;
+
+                            return new HtmlString($res);
+                        })
+                            ->schema([
+                                Select::make('material_id')
+                                    ->options(Material::all()->pluck('tipo', 'id')->toArray())
+                                    ->label('Tipo de material')
+                                    ->disabled()
+                                    ->afterStateUpdated(fn (callable $set, $get) => $set('material_listado_id', null))
+                                    ->reactive(),
+
+                                Select::make('material_listado_id')
+                                    ->label('Material')
+                                    ->disabled()
+                                    ->options(function (callable $get) {
+                                        $material = Material::find($get('material_id'));
+
+                                        if (!$material) {
+                                            return MaterialListado::all()->pluck('material', 'id');
+                                        }
+
+                                        $value = $material->materialesStock->pluck('material', 'id');
+
+                                        return $value;
+                                    })
+                                    ->afterStateUpdated(function ($set, $get) {
+                                        $id = MaterialListado::find($get('material_listado_id'));
+                                        $material = $id?->material;
+                                        $stock = $id->stock;
+
+                                        $set('material', $material);
+                                        $set('stock', $stock);
+                                    })
+                                    ->reactive()
+                                    ->searchable(),
+                            ])
+                            ->columns(2)
+                            ->collapsed(),
+
+                        Section::make(function ($record) {
+
+                            $estadoStock = "";
+
+                            $res = '👌 Esta mesada utiliza ' . $record->cantidad . 'm² del material.' . '<br> <span style="font-size: 16px; font-weight: 100;">El stock actualizado de <span style="color: #5A5100; font-weight: 500">' . $record->material . '</span> es de <span style="font-weight: 500">' . MaterialListado::find($record->material_listado_id)->stock . 'm²</span> ' . $estadoStock . '</span>';
+
+                            return new HtmlString($res);
+                        })
+                            ->schema([
+                                TextInput::make('cantidad')
+                                    ->label('Cantidad')
+                                    ->disabled()
+                                    ->numeric()
+                                    ->suffix('m²'),
+
+                                TextInput::make('stock')
+                                    ->label('Stock actual del material')
+                                    ->placeholder(function ($record) {
+                                        $material = MaterialListado::find($record->material_listado_id);
+
+                                        return $material->stock;
+                                    })
+                                    ->disabled()
+                                    ->numeric()
+                                    ->suffix('m²'),
+                            ])
+                            ->collapsed()
+                            ->columns(2),
+
+                        Section::make(function ($record) {
+                            $res = '<span style="font-size: 18px">Agregar o restar m² de ' . $record->material . ' en el pedido ' . $record->pedidos->identificacion . '</span>';
+
+                            return new HtmlString($res);
+                        })
+                            ->description('Tenga en cuenta que está manipulando el stock')
+                            ->schema([
+                                TextInput::make('quantity')
+                                    ->label(function ($record) {
+                                        $res = "<span style='color: #20BF42;'>(+) </span> Agregar m²";
+
+                                        return new HtmlString($res);
+                                    })
+                                    ->numeric()
+                                    ->suffix('m²')
+                                    ->saveRelationshipsUsing(function ($get, $record) {
+                                        // Actualizar stock
+                                        $material = MaterialListado::find($get('material_listado_id'));
+                                        $m2 = $get('quantity');
+                                        $stock = $material->stock;
+
+                                        $material->stock = intval($stock) - intval($m2);
+
+                                        $material->save();
+                                        // Sumar m² al pedido
+                                        $seleccion = MaterialesSelection::find($get('id'));
+                                        $actual = $seleccion->cantidad;
+
+                                        $seleccion->cantidad = intval($actual) + intval($m2);
+
+                                        $seleccion->save();
+                                    }),
+
+                                TextInput::make('quantityRes')
+                                    ->label(function ($record) {
+                                        $res = "<span style='color: red;'>(-) </span> Restar m²";
+
+                                        return new HtmlString($res);
+                                    })
+                                    ->numeric()
+                                    ->suffix('m²')
+                                    ->saveRelationshipsUsing(function ($get, $record) {
+                                        // Actualizar stock
+                                        $material = MaterialListado::find($get('material_listado_id'));
+                                        $m2 = $get('quantityRes');
+                                        $stock = $material->stock;
+
+                                        $material->stock = intval($stock) + intval($m2);
+
+                                        $material->save();
+                                        // Sumar m² al pedido
+                                        $seleccion = MaterialesSelection::find($get('id'));
+                                        $actual = $seleccion->cantidad;
+
+                                        $seleccion->cantidad = intval($actual) - intval($m2);
+
+                                        $seleccion->save();
+                                    })
+                            ])
+                            ->columns(2)
+                    ]),
+                Tables\Actions\DeleteAction::make()
+                    ->action(function ($record) {
+                        //Sumar y guardar el stock con la cantidad de material eliminado
+                        $seleccion = $record->material_id;
+                        $cantidad = $record->cantidad;
+                        $material = MaterialListado::find($seleccion);
+                        $material->stock = intval($material->stock) + $cantidad;
+                        $material->save();
+
+                        // Eliminar este material de la mesada
+                        $materialPedido = MaterialesSelection::find($record->id);
+                        $materialPedido->delete();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }    
+    }
 }
